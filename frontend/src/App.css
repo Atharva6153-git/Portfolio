@@ -259,12 +259,10 @@ html {
 
 /* Prevent iOS overscroll glow */
 body {
-  overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Prevent horizontal overflow on any device */
-html, body {
+/* Prevent horizontal overflow on any device (kept only on body to not break scroll) */
+body {
   overflow-x: hidden;
-  max-width: 100vw;
 }

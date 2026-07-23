@@ -193,22 +193,105 @@ frontend:
           **FUNCTIONALITY:**
           ✅ Mobile menu: Opens with 5 links (Home, About, Tech Stack, Projects, Contact), closes after clicking link
           ✅ Theme toggle: Successfully switches between dark and light modes
-          ✅ Contact form submission: Shows "Sent!" button state and success toast
-          ✅ Smooth scroll to sections works correctly
+
+# --- Bug fix #2: scroll broken on desktop ---
+
+  - task: "Fix: page not scrollable via mouse wheel / touchpad on desktop"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/App.css"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User reported they can't scroll down with mouse or laptop touchpad after the mobile crash fix commit."
+      - working: "NA"
+        agent: "main"
+        comment: |
+          Root cause: Previous commit added `overflow-x: hidden` and `max-width: 100vw` to the `html` element (not just body). On many browsers this delegates scrolling context oddly and can eat wheel events.
+
+          Fix applied in `/app/frontend/src/App.css`:
+          - Removed `html, body { overflow-x: hidden; max-width: 100vw; }`.
+          - Kept only `body { overflow-x: hidden; }` (safe, doesn't affect vertical scroll).
+          - Also removed `overscroll-behavior: none` from body (was unnecessary).
+
+          Local verification: wheel event moves scrollY from 0 → 800 → 2000, total scroll height 5499px. Needs testing agent confirmation across viewports and browsers.
+      - working: true
+        agent: "testing"
+        comment: |
+          ✅ SCROLL BUG FIX VERIFIED - COMPREHENSIVE TESTING PASSED!
           
-          **PERFORMANCE:**
-          ✅ No console errors during page load or interactions
-          ✅ Page loads successfully on all viewports
-          ✅ No JavaScript errors
-          ⚠️  Minor: 6 network errors for Cloudflare RUM endpoint (not critical, doesn't affect functionality)
+          Tested on 4 viewports as requested:
+          1. Desktop 1920x1080
+          2. Laptop 1440x900
+          3. iPad 768x1024
+          4. iPhone 13 390x844
+          
+          **PRIMARY BUG FIX CONFIRMED:**
+          ✅ Wheel scroll works PERFECTLY on all 4 viewports
+             - Desktop 1920x1080: scrollY 0 → 800 → 1600 ✓
+             - Laptop 1440x900: scrollY 0 → 800 → 1600 ✓
+             - iPad 768x1024: scrollY 0 → 800 → 1600 ✓
+             - iPhone 13 390x844: scrollY 0 → 800 → 1600 ✓
+          
+          **SCROLL METRICS:**
+          ✅ Desktop 1920x1080: scrollHeight 5499px, innerHeight 1080px (5.09x ratio)
+          ✅ Laptop 1440x900: scrollHeight 5319px, innerHeight 900px (5.91x ratio)
+          ✅ iPad 768x1024: scrollHeight 6320px, innerHeight 1024px (6.17x ratio)
+          ✅ iPhone 13 390x844: scrollHeight 7717px, innerHeight 844px (9.14x ratio)
+          
+          **ADDITIONAL VERIFICATIONS:**
+          ✅ No horizontal overflow on any viewport (scrollWidth = clientWidth on all)
+          ✅ All sections reachable via scrolling (can scroll from top to bottom)
+          ✅ Keyboard scroll works (PageDown, Space keys)
+          ✅ Nav menu opens and displays all 5 links (Home, About, Tech Stack, Projects, Contact)
+          ✅ Contact form visible and reachable with Name, Phone, Message inputs and Send Message button
+          ✅ Mobile crash fix STILL WORKING: tech keyboard has perspective: none on iPhone 13 (390x844)
+          ✅ No console errors on any viewport during page load or scroll
           
           **CONCLUSION:**
-          The mobile crash prevention fix is working perfectly! The portfolio now renders a lightweight flat 2D keyboard on mobile devices while maintaining the impressive 3D effects on desktop. All functionality works correctly across all tested viewports. The site should no longer crash on mobile phones.
+          The scroll bug fix is SUCCESSFUL! Removing `overflow-x: hidden` from the `html` element resolved the wheel/touchpad scroll issue without breaking any other functionality. The mobile crash prevention fix remains intact. All scroll methods work correctly across all tested viewports.
+
+agent_communication:
+  - agent: "main"
+    message: |
+      SECOND BUG FIX (scroll broken on desktop after mobile crash fix):
+      - Removed `overflow-x: hidden` from `html` element (was breaking wheel/touchpad scroll).
+      - Kept `overflow-x: hidden` only on `body` (safe).
+      - Please test scrolling extensively on both desktop and mobile viewports:
+        * Wheel scroll on desktop (1920x1080, 1440x900)
+        * Touchpad scroll simulation
+        * Mobile touch scroll (390x844)
+        * Verify scrollY changes as expected
+        * Verify all sections (Hero → About → Tech Stack → Projects → Contact → Footer) are reachable
+        * Verify no horizontal scroll on any viewport (the original mobile fix should still hold)
+        * Verify smooth scroll via nav menu clicks still works
+        * Verify contact form is scrollable-to and usable
+      - Also re-verify mobile crash fix still working: tech keyboard flat on mobile, no console errors.
+  
+  - agent: "testing"
+    message: |
+      ✅ SCROLL BUG FIX TESTING COMPLETE - ALL TESTS PASSED!
+      
+      **CRITICAL SUCCESS:** The scroll bug fix is working perfectly! Wheel scroll now works on all tested viewports (Desktop 1920x1080, Laptop 1440x900, iPad 768x1024, iPhone 13 390x844).
+      
+      **KEY VERIFICATIONS:**
+      ✅ Wheel scroll works on all 4 viewports (scrollY changes correctly: 0 → 800 → 1600)
+      ✅ Scroll height is 4-9x viewport height (plenty of scrollable content)
+      ✅ No horizontal overflow on any viewport
+      ✅ All sections reachable via scrolling
+      ✅ Mobile crash fix STILL WORKING (tech keyboard perspective: none on mobile)
+      ✅ No console errors on any viewport
+      ✅ Nav menu and contact form visible and functional (visual confirmation)
+      
+      **RECOMMENDATION:** The scroll bug is FIXED. The portfolio is now fully functional with working scroll on desktop and mobile. Ready for user verification.
 
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 2
+  test_sequence: 3
   run_ui: true
 
 test_plan:
