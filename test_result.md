@@ -101,3 +101,159 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Portfolio website for Atharva Jadhav crashes on mobile phones when friends open it. Need to make it mobile-friendly and stable on iOS Safari / Android Chrome without crashes."
+
+frontend:
+  - task: "Mobile responsiveness & crash prevention on portfolio"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/App.css, /app/frontend/src/components/TechKeyboard.jsx, /app/frontend/src/components/Hero.jsx, /app/frontend/src/components/Navbar.jsx, /app/frontend/public/index.html"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: |
+          User reported their friends' phones CRASH when opening the portfolio site. Identified likely GPU-heavy causes:
+          1) 3D CSS keyboard combines `perspective`, `transform-style: preserve-3d`, `filter: drop-shadow`, per-key `will-change`, 24 keys with box-shadows — causes iOS Safari GPU crash.
+          2) `backdrop-blur-xl` used on navbar + mobile menu overlay.
+          3) 24 Framer Motion entrance animations firing simultaneously.
+          4) Starfield background animation always on.
+
+          Applied fixes:
+          - In `/app/frontend/src/App.css`:
+            * Added `@media (max-width: 640px)` block that flattens the 3D keyboard (`perspective: none`, `transform: none !important` on board & keys, kills `filter: drop-shadow`, uses lighter box-shadows, kills starfield animation, lowers opacity).
+            * Added `@media (max-width: 1024px)` that already removes drop-shadow filter.
+            * Moved `:hover` styles into `@media (hover: hover) and (pointer: fine)` so mobile browsers never trigger hover (avoids `will-change` allocation).
+            * Added `@media (prefers-reduced-motion: reduce)` to disable animations.
+            * Added `html, body { overflow-x: hidden; max-width: 100vw }` to prevent side-scroll.
+          - In `/app/frontend/src/components/TechKeyboard.jsx`:
+            * Added `useEffect` + `resize` listener to detect `isMobile = window.innerWidth < 640`.
+            * On mobile: renders keys as plain `<div>` (NO framer-motion whileHover / entrance), board uses lightweight fade-in only.
+            * Desktop keeps full 3D staggered entrance.
+          - In `/app/frontend/src/components/Hero.jsx`:
+            * Starfield hidden on `< sm` screens (`hidden sm:block`).
+            * Radial glow hidden on `< md`.
+            * Reduced text sizes: `text-5xl sm:text-6xl md:text-7xl lg:text-8xl` (previously started at 6xl).
+            * Trimmed vertical padding on mobile.
+          - In `/app/frontend/src/components/Navbar.jsx`:
+            * Navbar: `backdrop-blur-md md:backdrop-blur-xl` (medium on mobile).
+            * Menu overlay: `backdrop-blur-md md:backdrop-blur-xl`.
+            * Added `mobile-lite-blur` class targeted by CSS media query.
+          - In `/app/frontend/public/index.html`:
+            * Updated viewport meta: `width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover`.
+          
+          Needs testing on:
+          - Mobile viewports (iPhone SE 375x667, iPhone 13 390x844, small Android 360x640)
+          - Verify NO horizontal scroll
+          - Verify layout stacks cleanly (hero, about, tech, projects, contact all readable single-column)
+          - Verify tech keyboard renders as flat grid on mobile (not tilted 3D)
+          - Verify no JS console errors on load or scroll
+          - Verify theme toggle, mobile menu open/close, smooth scroll to sections all work
+          - Verify contact form is usable (inputs focusable, tap targets big enough)
+          - Verify the page fully loads and remains responsive during scroll (no jank/freeze that could crash)
+      
+      - working: true
+        agent: "testing"
+        comment: |
+          ✅ COMPREHENSIVE MOBILE TESTING COMPLETED - ALL TESTS PASSED!
+          
+          Tested on 5 viewports: iPhone SE (375x667), iPhone 13 (390x844), Small Android (360x640), iPad (768x1024), Desktop (1920x800)
+          
+          **CRITICAL CRASH PREVENTION FIXES VERIFIED:**
+          ✅ Tech keyboard is FLAT on mobile (< 640px):
+             - perspective: none (no 3D perspective)
+             - transform: none (no 3D rotation on board)
+             - transform: none on keys (no translateZ)
+             - This eliminates the GPU-intensive 3D transforms that were causing crashes!
+          
+          ✅ GPU optimizations on mobile:
+             - Starfield hidden on mobile (saves GPU cycles)
+             - Radial glow hidden on screens < 768px
+             - Backdrop blur reduced to medium on mobile
+             - No will-change on hover (mobile doesn't trigger hover media query)
+          
+          ✅ 3D effects preserved on desktop/tablet (>= 640px):
+             - perspective: 1400px (3D perspective enabled)
+             - transform: matrix3d(...) (3D rotation enabled)
+             - drop-shadow filter on desktop only
+             - Starfield and radial glow visible
+          
+          **LAYOUT & RESPONSIVENESS:**
+          ✅ No horizontal scroll on any viewport (scrollWidth = clientWidth on all)
+          ✅ Hero section: "Atharva Jadhav" name visible, Resume/GitHub/LinkedIn buttons accessible
+          ✅ About section: Profile image and text render correctly
+          ✅ Tech Stack section: 28 tech items in responsive grid (3-col mobile, 6-col desktop)
+          ✅ Projects section: 4 projects in responsive grid (1-col mobile, 2-col desktop)
+          ✅ Contact form: Name, Phone, Message inputs all focusable and reachable
+          ✅ Footer: Copyright text and social icons visible
+          
+          **FUNCTIONALITY:**
+          ✅ Mobile menu: Opens with 5 links (Home, About, Tech Stack, Projects, Contact), closes after clicking link
+          ✅ Theme toggle: Successfully switches between dark and light modes
+          ✅ Contact form submission: Shows "Sent!" button state and success toast
+          ✅ Smooth scroll to sections works correctly
+          
+          **PERFORMANCE:**
+          ✅ No console errors during page load or interactions
+          ✅ Page loads successfully on all viewports
+          ✅ No JavaScript errors
+          ⚠️  Minor: 6 network errors for Cloudflare RUM endpoint (not critical, doesn't affect functionality)
+          
+          **CONCLUSION:**
+          The mobile crash prevention fix is working perfectly! The portfolio now renders a lightweight flat 2D keyboard on mobile devices while maintaining the impressive 3D effects on desktop. All functionality works correctly across all tested viewports. The site should no longer crash on mobile phones.
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 2
+  run_ui: true
+
+test_plan:
+  current_focus: []
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: |
+      Portfolio site was crashing on mobile phones (per user's friends). Applied comprehensive mobile GPU-safety fixes:
+      1. Flatten 3D tech keyboard on screens < 640px (no perspective, no will-change, no per-key motion animations, lighter shadows).
+      2. Reduce backdrop-blur intensity on mobile.
+      3. Hide starfield & radial glow on very small screens.
+      4. Enforce `overflow-x: hidden` globally.
+      5. Respect `prefers-reduced-motion`.
+      6. Update viewport meta.
+
+      Please test the frontend on mobile viewports (390x844 iPhone 13, 360x640 small Android, 768x1024 iPad).
+      Verify:
+      - No horizontal scroll
+      - Tech keyboard renders flat on mobile (not tilted)
+      - Nav menu opens/closes properly on mobile
+      - Theme toggle works
+      - Smooth scroll to each section (Home, About, Tech Stack, Projects, Contact) works
+      - Contact form inputs are focusable and Send Message button visible
+      - No console errors during load or scroll
+      - Page remains responsive (no long tasks / jank) — this is the key indicator that our crash fix worked
+      Focus areas: mobile viewport rendering, no crashes, smooth interactions.
+  
+  - agent: "testing"
+    message: |
+      ✅ MOBILE CRASH PREVENTION TESTING COMPLETE - ALL TESTS PASSED!
+      
+      Comprehensive testing completed on 5 viewports (iPhone SE, iPhone 13, Small Android, iPad, Desktop).
+      
+      **KEY FINDINGS:**
+      1. ✅ Mobile crash fix is WORKING PERFECTLY - Tech keyboard is completely flat on mobile (< 640px) with no GPU-intensive 3D transforms
+      2. ✅ Desktop 3D effects are preserved on larger screens (>= 640px)
+      3. ✅ No horizontal scroll on any viewport
+      4. ✅ All sections render correctly and are fully functional
+      5. ✅ Mobile menu, theme toggle, contact form all working
+      6. ✅ No console errors or critical issues
+      
+      The portfolio should no longer crash on mobile phones. The fix successfully eliminates GPU overload while maintaining the impressive 3D effects on desktop.
+      
+      **RECOMMENDATION:** Ready for user testing on real mobile devices. The automated tests confirm all crash prevention measures are in place and working correctly.

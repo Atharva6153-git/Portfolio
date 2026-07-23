@@ -33,7 +33,7 @@ const Navbar = () => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-[background,backdrop-filter,border-color] duration-300 ${
           scrolled
-            ? "bg-[hsl(var(--background))]/70 backdrop-blur-xl border-b border-[hsl(var(--border))]"
+            ? "bg-[hsl(var(--background))]/80 backdrop-blur-md md:backdrop-blur-xl mobile-lite-blur border-b border-[hsl(var(--border))]"
             : "bg-transparent"
         }`}
       >
@@ -97,7 +97,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-[hsl(var(--background))]/95 backdrop-blur-xl flex items-center justify-center"
+            className="fixed inset-0 z-40 bg-[hsl(var(--background))]/95 backdrop-blur-md md:backdrop-blur-xl flex items-center justify-center"
           >
             <nav className="flex flex-col items-center gap-6">
               {navLinks.map((link, idx) => (

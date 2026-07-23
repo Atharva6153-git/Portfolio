@@ -10,20 +10,20 @@ const Hero = () => {
       id="home"
       className="relative min-h-screen w-full overflow-hidden flex items-center"
     >
-      {/* Starfield */}
-      <div className="absolute inset-0 pointer-events-none starfield" />
+      {/* Starfield - hidden on very small screens to save GPU */}
+      <div className="absolute inset-0 pointer-events-none starfield hidden sm:block" />
 
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 pointer-events-none bg-radial-hero" />
+      {/* Subtle radial glow - only on md+ */}
+      <div className="absolute inset-0 pointer-events-none bg-radial-hero hidden md:block" />
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-10 pt-32 pb-24 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-10 pt-28 md:pt-32 pb-20 md:pb-24 grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
         {/* Left */}
         <div>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-sm md:text-base text-[hsl(var(--muted-foreground))] mb-4"
+            className="text-sm md:text-base text-[hsl(var(--muted-foreground))] mb-3 md:mb-4"
           >
             {personalInfo.greeting}
           </motion.p>
@@ -32,7 +32,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] text-[hsl(var(--foreground))]"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] text-[hsl(var(--foreground))] break-words"
           >
             Atharva
             <br />
@@ -43,7 +43,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-6 text-lg md:text-xl font-semibold text-[hsl(var(--muted-foreground))]"
+            className="mt-5 md:mt-6 text-base md:text-xl font-semibold text-[hsl(var(--muted-foreground))]"
           >
             {personalInfo.role}
           </motion.p>
@@ -52,7 +52,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-10 flex flex-wrap gap-3"
+            className="mt-8 md:mt-10 flex flex-wrap gap-3"
           >
             <a
               href={personalInfo.resumeUrl}

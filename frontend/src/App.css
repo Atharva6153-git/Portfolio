@@ -116,7 +116,6 @@ html {
 }
 
 .tech-keyboard-board::before {
-  /* subtle wood grain */
   content: "";
   position: absolute;
   inset: 0;
@@ -152,7 +151,7 @@ html {
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: clamp(11px, 1.3vw, 15px);
+  font-size: clamp(10px, 1.3vw, 15px);
   transform-style: preserve-3d;
   transform: translateZ(14px);
   box-shadow:
@@ -164,34 +163,108 @@ html {
   user-select: none;
   letter-spacing: 0.02em;
   text-shadow: 0 1px 0 rgba(0,0,0,0.15);
-  will-change: transform;
 }
 
-.tech-key:hover {
-  transform: translateZ(30px) scale(1.08);
-  box-shadow:
-    0 14px 0 rgba(0,0,0,0.55),
-    inset 0 -3px 0 rgba(0,0,0,0.25),
-    inset 0 2px 0 rgba(255,255,255,0.25),
-    0 0 24px rgba(255,255,255,0.15);
-  filter: brightness(1.15);
-  z-index: 5;
+/* Only apply hover effects on devices that actually support hover (desktop) */
+@media (hover: hover) and (pointer: fine) {
+  .tech-key {
+    will-change: transform;
+  }
+  .tech-key:hover {
+    transform: translateZ(30px) scale(1.08);
+    box-shadow:
+      0 14px 0 rgba(0,0,0,0.55),
+      inset 0 -3px 0 rgba(0,0,0,0.25),
+      inset 0 2px 0 rgba(255,255,255,0.25),
+      0 0 24px rgba(255,255,255,0.15);
+    filter: brightness(1.15);
+    z-index: 5;
+  }
 }
 
 .tech-key-label {
-  transform: translateZ(2px);
   z-index: 2;
 }
 
-/* Responsive tuning */
-@media (max-width: 768px) {
+/* ====================================================
+   MOBILE OPTIMIZATIONS — prevent iOS Safari crashes
+   ==================================================== */
+
+/* Tablets and below: simplify keyboard */
+@media (max-width: 1024px) {
   .tech-keyboard-scene {
-    max-width: 420px;
+    max-width: 480px;
+    /* drop-shadow filter is EXTREMELY expensive on mobile GPUs */
+    filter: none;
   }
   .tech-keyboard-board {
     padding: 16px;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.06),
+      0 20px 40px rgba(0,0,0,0.4);
   }
 }
 
+/* Small phones: flatten 3D entirely to avoid GPU overload */
+@media (max-width: 640px) {
+  .tech-keyboard-scene {
+    max-width: 360px;
+    perspective: none;
+    filter: none;
+  }
+  .tech-keyboard-board {
+    /* Kill the 3D isometric rotation on small screens */
+    transform: none !important;
+    padding: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+  }
+  .tech-keyboard-grid {
+    transform-style: flat;
+    gap: 8px;
+  }
+  .tech-key {
+    /* Remove 3D transform on mobile */
+    transform: none;
+    transform-style: flat;
+    box-shadow:
+      0 3px 0 rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.12);
+    font-size: 11px;
+  }
+
+  /* Lighter starfield on phones */
+  .starfield {
+    opacity: 0.3;
+    animation: none;
+    background-size: 800px 300px;
+  }
+
+  /* Reduce backdrop blur — very expensive on iOS Safari */
+  .mobile-lite-blur {
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+  }
+}
+
+/* Respect users who prefer reduced motion (also helps mobile) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .starfield { animation: none; }
+}
+
 /* Prevent iOS overscroll glow */
-body { overscroll-behavior: none; }
+body {
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent horizontal overflow on any device */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
