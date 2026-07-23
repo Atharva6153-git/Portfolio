@@ -4,7 +4,6 @@ import { techStack } from "../mock/mock";
 
 // A 3D isometric keyboard-style tech grid. Pure CSS 3D transforms.
 const TechKeyboard = () => {
-  // 6 columns x 4 rows = 24 keys. Fill with tech items, remaining are blank keys.
   const cols = 6;
   const rows = 4;
   const total = cols * rows;
@@ -29,7 +28,6 @@ const TechKeyboard = () => {
               initial={{ y: -30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 + i * 0.03, duration: 0.5, ease: "easeOut" }}
-              whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="tech-key"
               style={{
                 background: item ? item.bg : "#1a1a1e",
@@ -37,7 +35,6 @@ const TechKeyboard = () => {
               }}
             >
               <span className="tech-key-label">{item ? item.short : ""}</span>
-              <span className="tech-key-side" />
             </motion.div>
           ))}
         </div>
