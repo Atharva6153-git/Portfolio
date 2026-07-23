@@ -11,6 +11,7 @@ export const personalInfo = {
   about: "I'm a passionate Full Stack Developer who loves crafting clean, efficient, and scalable web applications. From building responsive interfaces with React to architecting robust backends with Node.js and Python, I enjoy every layer of the stack. I'm continually exploring modern architectures like microservices, event-driven systems with Kafka, and AI-powered experiences using Groq and Google Gemini APIs.",
   location: "India",
   availability: "Open to opportunities",
+  profileImage: "https://customer-assets-lqy194kg.emergentagent.net/job_dev-atharva-1/artifacts/fssavhav_Atharva%20PFP.jpeg",
 };
 
 export const techStack = [

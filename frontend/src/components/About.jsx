@@ -38,21 +38,22 @@ const About = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-2"
           >
-            <div className="relative aspect-square max-w-[380px] rounded-3xl border border-[hsl(var(--border))] overflow-hidden bg-gradient-to-br from-[hsl(var(--muted))] to-[hsl(var(--background))]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-[10rem] font-black tracking-tighter text-[hsl(var(--foreground))]/8 select-none">
-                  AJ
-                </div>
-              </div>
-              <div className="absolute inset-0 grid-pattern opacity-40" />
-              <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
+            <div className="relative aspect-square max-w-[380px] rounded-3xl border border-[hsl(var(--border))] overflow-hidden bg-gradient-to-br from-[hsl(var(--muted))] to-[hsl(var(--background))] group">
+              <img
+                src={personalInfo.profileImage}
+                alt="Atharva Jadhav"
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+              <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between text-white">
                 <div>
-                  <p className="text-xs text-[hsl(var(--muted-foreground))]">Based in</p>
+                  <p className="text-xs text-white/70">Based in</p>
                   <p className="text-sm font-medium">{personalInfo.location}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-xs text-[hsl(var(--muted-foreground))]">Available</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-xs text-white/80">Available</span>
                 </div>
               </div>
             </div>
