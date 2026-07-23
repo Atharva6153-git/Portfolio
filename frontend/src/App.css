@@ -1,0 +1,193 @@
+/* Portfolio - Atharva Jadhav */
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.App {
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Selection */
+::selection {
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Starfield background */
+.starfield {
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 60px 80px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 130px 200px, rgba(255,255,255,0.55), transparent),
+    radial-gradient(1px 1px at 220px 60px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 320px 180px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.2px 1.2px at 420px 300px, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 520px 120px, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 640px 260px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1.4px 1.4px at 740px 40px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 880px 340px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 1000px 90px, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1.2px 1.2px at 1120px 220px, rgba(255,255,255,0.4), transparent);
+  background-repeat: repeat;
+  background-size: 1200px 400px;
+  opacity: 0.55;
+  animation: starDrift 90s linear infinite;
+}
+
+.light .starfield {
+  opacity: 0.15;
+}
+
+@keyframes starDrift {
+  from { background-position: 0 0; }
+  to   { background-position: 1200px 0; }
+}
+
+.bg-radial-hero {
+  background: radial-gradient(1000px 500px at 75% 40%, hsl(var(--foreground) / 0.06), transparent 60%);
+}
+
+/* Grid pattern for cards */
+.grid-pattern {
+  background-image:
+    linear-gradient(hsl(var(--border)) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ==============================
+   3D Tech Keyboard
+   ============================== */
+.tech-keyboard-scene {
+  perspective: 1400px;
+  perspective-origin: 50% 40%;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 40px 60px rgba(0,0,0,0.55));
+}
+
+.tech-keyboard-board {
+  width: 88%;
+  padding: 22px;
+  border-radius: 22px;
+  transform-style: preserve-3d;
+  background:
+    linear-gradient(145deg, #2a2016 0%, #1a1109 40%, #100a05 100%);
+  border: 1px solid #3a2b1c;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.06),
+    inset 0 -6px 20px rgba(0,0,0,0.7),
+    0 30px 60px rgba(0,0,0,0.55);
+  position: relative;
+}
+
+.tech-keyboard-board::before {
+  /* subtle wood grain */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: repeating-linear-gradient(
+    115deg,
+    rgba(255,255,255,0.02) 0 2px,
+    transparent 2px 6px
+  );
+  pointer-events: none;
+}
+
+.light .tech-keyboard-board {
+  background: linear-gradient(145deg, #d9c4a7 0%, #b89773 45%, #8f6e4a 100%);
+  border-color: #a8845c;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.35),
+    inset 0 -6px 20px rgba(0,0,0,0.15),
+    0 30px 60px rgba(0,0,0,0.25);
+}
+
+.tech-keyboard-grid {
+  display: grid;
+  gap: 10px;
+  transform-style: preserve-3d;
+}
+
+.tech-key {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: clamp(11px, 1.3vw, 15px);
+  transform-style: preserve-3d;
+  transform: translateZ(14px);
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.55),
+    inset 0 -3px 0 rgba(0,0,0,0.25),
+    inset 0 2px 0 rgba(255,255,255,0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: default;
+  user-select: none;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+.tech-key:hover {
+  box-shadow:
+    0 10px 0 rgba(0,0,0,0.55),
+    inset 0 -3px 0 rgba(0,0,0,0.25),
+    inset 0 2px 0 rgba(255,255,255,0.22),
+    0 0 20px rgba(255,255,255,0.08);
+}
+
+.tech-key-label {
+  transform: translateZ(2px);
+  z-index: 2;
+}
+
+/* Responsive tuning */
+@media (max-width: 768px) {
+  .tech-keyboard-scene {
+    max-width: 420px;
+  }
+  .tech-keyboard-board {
+    padding: 16px;
+  }
+}
+
+/* Prevent iOS overscroll glow */
+body { overscroll-behavior: none; }
