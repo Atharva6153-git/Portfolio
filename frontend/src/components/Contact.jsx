@@ -9,20 +9,19 @@ const Contact = () => {
   const formRef = useRef(null);
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", doubt: "" });
 
   const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
+    if (!form.name || !form.phone || !form.doubt) {
       toast({ title: "Missing fields", description: "Please fill in all fields before sending." });
       return;
     }
 
     setStatus("sending");
 
-    // If EmailJS keys are still placeholders, gracefully simulate.
     const configured =
       emailjsConfig.serviceId !== "YOUR_SERVICE_ID" &&
       emailjsConfig.templateId !== "YOUR_TEMPLATE_ID" &&
@@ -37,18 +36,17 @@ const Contact = () => {
           { publicKey: emailjsConfig.publicKey }
         );
       } else {
-        // Simulated success while EmailJS keys are not yet configured.
         await new Promise((r) => setTimeout(r, 900));
         console.log("[EmailJS not configured] Simulated send:", form);
       }
       setStatus("success");
       toast({
-        title: "Message sent ✓",
+        title: "Message sent",
         description: configured
           ? "Thanks! I'll get back to you soon."
           : "Simulated — add EmailJS keys in .env to deliver real emails.",
       });
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", phone: "", doubt: "" });
       setTimeout(() => setStatus("idle"), 2500);
     } catch (err) {
       console.error(err);
@@ -149,13 +147,13 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Email</label>
+                <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Phone</label>
                 <input
-                  name="email"
-                  value={form.email}
+                  name="phone"
+                  value={form.phone}
                   onChange={onChange}
-                  type="email"
-                  placeholder="you@email.com"
+                  type="tel"
+                  placeholder="+91 98765 43210"
                   className="mt-2 w-full bg-transparent border-b border-[hsl(var(--border))] py-2 text-sm outline-none focus:border-[hsl(var(--foreground))] transition-colors"
                 />
               </div>
@@ -164,8 +162,8 @@ const Contact = () => {
             <div>
               <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Message</label>
               <textarea
-                name="message"
-                value={form.message}
+                name="doubt"
+                value={form.doubt}
                 onChange={onChange}
                 rows={5}
                 placeholder="Tell me about your project..."
