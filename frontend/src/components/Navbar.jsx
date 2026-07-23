@@ -40,9 +40,9 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-5">
           <button
             onClick={() => handleNav("#home")}
-            className="text-sm font-semibold tracking-tight lowercase text-[hsl(var(--foreground))] hover:opacity-80 transition-opacity"
+            className="text-sm font-semibold tracking-tight text-[hsl(var(--foreground))] hover:opacity-80 transition-opacity"
           >
-            atharva jadhav
+            Atharva Jadhav
           </button>
 
           <div className="flex items-center gap-2">

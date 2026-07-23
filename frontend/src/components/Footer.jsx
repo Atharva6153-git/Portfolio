@@ -7,9 +7,9 @@ const Footer = () => {
     <footer className="relative border-t border-[hsl(var(--border))] py-10">
       <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-wrap items-center justify-between gap-6">
         <div>
-          <p className="text-sm font-semibold lowercase">atharva jadhav</p>
+          <p className="text-sm font-semibold">Atharva Jadhav</p>
           <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
-            © {new Date().getFullYear()} — Built with React, Tailwind & Framer Motion.
+            Built by Atharva Jadhav
           </p>
         </div>
         <div className="flex items-center gap-3">

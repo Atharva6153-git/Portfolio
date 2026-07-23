@@ -43,9 +43,6 @@ const Projects = () => {
                     {p.highlight}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                  <span>{p.year}</span>
-                </div>
               </div>
 
               <h3 className="relative text-2xl md:text-3xl font-bold tracking-tight mb-3 flex items-center gap-2">
