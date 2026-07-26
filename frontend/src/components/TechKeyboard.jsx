@@ -57,7 +57,7 @@ const TechKey3D = ({ item, index }) => {
   const [hovered, setHovered] = useState(false);
   
   // Z position pushes out slightly on hover
-  const z = hovered && !isEmpty ? 0.35 : 0.25;
+  const z = hovered && !isEmpty ? 0.45 : 0.35;
 
   return (
     <group 
@@ -65,25 +65,23 @@ const TechKey3D = ({ item, index }) => {
       onPointerOver={() => setHovered(true)} 
       onPointerOut={() => setHovered(false)}
     >
-      <RoundedBox args={[KEY_SIZE, KEY_SIZE, 0.4]} radius={0.15}>
+      <RoundedBox args={[KEY_SIZE, KEY_SIZE, 0.7]} radius={0.18} smoothness={4}>
         <meshStandardMaterial 
-          color={isEmpty ? "#222" : item.bg} 
-          roughness={0.4} 
+          color={isEmpty ? "#1e1e1e" : item.bg} 
+          roughness={0.8} 
           metalness={0.1}
-          emissive={hovered && !isEmpty ? item.color : "black"}
-          emissiveIntensity={hovered ? 0.4 : 0}
         />
       </RoundedBox>
 
       {!isEmpty && (
-        <Html transform position={[0, 0, 0.21]} distanceFactor={3.5} zIndexRange={[100, 0]} pointerEvents="none">
+        <Html transform position={[0, 0, 0.36]} distanceFactor={3.2} zIndexRange={[100, 0]} pointerEvents="none">
           <div style={{
-            width: '60px',
-            height: '60px',
+            width: '64px',
+            height: '64px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transform: hovered ? 'scale(1.15)' : 'scale(1)',
+            transform: hovered ? 'scale(1.1)' : 'scale(1)',
             transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
           }}>
             {item.icon ? (
@@ -91,12 +89,12 @@ const TechKey3D = ({ item, index }) => {
                 src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${item.icon}/${item.icon}-original.svg`}
                 alt={item.name}
                 style={{
-                  width: '65%',
-                  height: '65%',
+                  width: '60%',
+                  height: '60%',
                   objectFit: 'contain',
                   filter: item.invertIcon 
-                    ? `invert(1) brightness(2) drop-shadow(0 4px 6px rgba(0,0,0,0.5))` 
-                    : `drop-shadow(0 4px 6px rgba(0,0,0,0.4))`
+                    ? `invert(1) brightness(2)` 
+                    : `none`
                 }}
                 draggable={false}
               />
@@ -105,8 +103,7 @@ const TechKey3D = ({ item, index }) => {
                 color: item.text, 
                 fontWeight: '900', 
                 fontSize: '18px', 
-                letterSpacing: '1px',
-                textShadow: '0 4px 6px rgba(0,0,0,0.4)' 
+                letterSpacing: '1px'
               }}>
                 {item.short}
               </span>
@@ -122,21 +119,16 @@ const KeyboardScene = ({ items }) => {
   return (
     <PresentationControls
       global
-      rotation={[0.6, -0.3, 0]}
-      polar={[-0.4, 0.4]}
-      azimuth={[-0.4, 0.4]}
+      rotation={[0.7, -0.4, 0]}
+      polar={[-0.2, 0.2]}
+      azimuth={[-0.2, 0.2]}
       config={{ mass: 2, tension: 400 }}
       snap={{ mass: 4, tension: 400 }}
     >
-      <Float rotationIntensity={0.3} floatIntensity={0.6} floatingRange={[-0.1, 0.1]}>
+      <Float rotationIntensity={0.15} floatIntensity={0.3} floatingRange={[-0.05, 0.05]}>
         {/* Board Base */}
-        <RoundedBox args={[BOARD_WIDTH, BOARD_HEIGHT, 0.4]} radius={0.2} position={[0, 0, -0.2]}>
-          <meshStandardMaterial color="#111" roughness={0.7} metalness={0.2} />
-        </RoundedBox>
-
-        {/* Board Trim (Accent) */}
-        <RoundedBox args={[BOARD_WIDTH + 0.1, BOARD_HEIGHT + 0.1, 0.35]} radius={0.25} position={[0, 0, -0.25]}>
-          <meshStandardMaterial color="#333" roughness={0.5} metalness={0.5} />
+        <RoundedBox args={[BOARD_WIDTH, BOARD_HEIGHT, 1.2]} radius={0.3} position={[0, 0, -0.6]} smoothness={4}>
+          <meshStandardMaterial color="#1a1a1a" roughness={0.85} metalness={0.1} />
         </RoundedBox>
 
         {/* Keys */}
@@ -179,10 +171,10 @@ const TechKeyboard = () => {
 
   return (
     <div className="w-full h-full min-h-[500px] flex items-center justify-center" style={{ cursor: 'grab' }}>
-      <Canvas camera={{ position: [0, 0, 9], fov: 45 }}>
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[10, 10, 10]} intensity={1.5} castShadow />
-        <directionalLight position={[-10, -10, -10]} intensity={0.5} />
+      <Canvas camera={{ position: [0, 0, 10], fov: 40 }}>
+        <ambientLight intensity={1.2} />
+        <directionalLight position={[10, 15, 10]} intensity={1.8} castShadow />
+        <directionalLight position={[-10, -10, -10]} intensity={0.4} />
         
         <Suspense fallback={null}>
           <KeyboardScene items={items.slice(0, TOTAL)} />
