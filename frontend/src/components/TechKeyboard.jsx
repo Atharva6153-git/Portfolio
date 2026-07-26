@@ -50,36 +50,36 @@ const TechKey = ({ item, index, isMobile }) => {
   const layers = Array.from({ length: depth });
 
   return (
-    <motion.div
-      initial={{ y: -30, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      whileHover={!isMobile && !isEmpty ? { z: 28, scale: 1.08 } : undefined}
-      transition={{ delay: 0.4 + index * 0.03, duration: 0.5, ease: "easeOut" }}
-      className={keyClass}
-      style={{ ...style, transformStyle: "preserve-3d" }}
-      title={item?.name}
-    >
-      {layers.map((_, d) => (
-        <div
-          key={d}
-          style={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: "inherit",
-            background: d === depth - 1 
-              ? "var(--key-bg)" 
-              : "color-mix(in srgb, var(--key-bg) 40%, black)",
-            transform: `translateZ(${d}px)`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: d === 0 ? "0 4px 10px rgba(0,0,0,0.6)" : (d === depth - 1 ? "inset 0 2px 2px rgba(255, 255, 255, 0.2)" : "none"),
-          }}
-        >
-          {d === depth - 1 && !isEmpty && <TechKeyIcon item={item} />}
-        </div>
-      ))}
-    </motion.div>
+    <div className={keyClass} style={{ ...style, transformStyle: "preserve-3d", position: "relative" }} title={item?.name}>
+      <motion.div
+        initial={{ y: -30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        whileHover={!isMobile && !isEmpty ? { z: -4, scale: 0.98 } : undefined}
+        transition={{ delay: 0.4 + index * 0.03, duration: 0.5, ease: "easeOut" }}
+        style={{ width: "100%", height: "100%", transformStyle: "preserve-3d" }}
+      >
+        {layers.map((_, d) => (
+          <div
+            key={d}
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "inherit",
+              background: d === depth - 1 
+                ? "var(--key-bg)" 
+                : "color-mix(in srgb, var(--key-bg) 40%, black)",
+              transform: `translateZ(${d}px)`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: d === 0 ? "0 4px 10px rgba(0,0,0,0.6)" : (d === depth - 1 ? "inset 0 2px 2px rgba(255, 255, 255, 0.2)" : "none"),
+            }}
+          >
+            {d === depth - 1 && !isEmpty && <TechKeyIcon item={item} />}
+          </div>
+        ))}
+      </motion.div>
+    </div>
   );
 };
 
