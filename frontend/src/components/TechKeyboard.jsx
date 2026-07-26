@@ -90,7 +90,8 @@ const TechKey = ({ item, index, isMobile }) => {
           position: 'absolute', 
           inset: 0, 
           transform: `translateZ(${depth}px)`, 
-          cursor: isEmpty ? 'default' : 'pointer' 
+          cursor: isEmpty ? 'default' : 'pointer',
+          background: 'rgba(255, 255, 255, 0.01)'
         }} 
       />
     </motion.div>
