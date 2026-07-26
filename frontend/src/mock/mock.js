@@ -29,7 +29,7 @@ export const techStack = [
   // Backend
   { name: "Node.js", category: "Backend", color: "#339933", short: "NJ", bg: "#222", text: "#68A063", icon: "nodejs" },
   { name: "Express", category: "Backend", color: "#ffffff", short: "EX", bg: "#1F1F1F", text: "#fff", icon: "express", invertIcon: true },
-  { name: "Flask", category: "Backend", color: "#000000", short: "FL", bg: "#ffffff", text: "#000", icon: "flask" },
+  { name: "Flask", category: "Backend", color: "#ffffff", short: "FL", bg: "#111", text: "#fff", icon: "flask", invertIcon: true },
   { name: "FastAPI", category: "Backend", color: "#009688", short: "FA", bg: "#222", text: "#009688", icon: "fastapi" },
 
   // Databases
@@ -40,7 +40,7 @@ export const techStack = [
   // DevOps
   { name: "Docker", category: "DevOps", color: "#2496ED", short: "DK", bg: "#2496ED", text: "#fff", icon: "docker" },
   { name: "Kafka", category: "DevOps", color: "#231F20", short: "KF", bg: "#231F20", text: "#fff", icon: "apachekafka", invertIcon: true },
-  { name: "Microservices", category: "DevOps", color: "#4A5568", short: "MS", bg: "#ffffff", text: "#4A5568", icon: "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/network.svg" },
+  { name: "Microservices", category: "DevOps", color: "#ffffff", short: "MS", bg: "#222", text: "#fff", icon: "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/network.svg", invertIcon: true },
 
   // Tools
   { name: "Git", category: "Tools", color: "#F05032", short: "GT", bg: "#222", text: "#fff", icon: "git" },
