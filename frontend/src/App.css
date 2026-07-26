@@ -217,14 +217,22 @@ html {
    ============================== */
 .tech-keyboard-scene {
   perspective: 1400px;
-  perspective-origin: 50% 40%;
+  perspective-origin: 50% 38%;
   width: 100%;
   max-width: 560px;
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 40px 60px rgba(0,0,0,0.55));
+  filter: drop-shadow(0 48px 70px rgba(0, 0, 0, 0.6));
+}
+
+.tech-keyboard-float {
+  transform-style: preserve-3d;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tech-keyboard-board {
@@ -236,9 +244,10 @@ html {
     linear-gradient(145deg, #2a2016 0%, #1a1109 40%, #100a05 100%);
   border: 1px solid #3a2b1c;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.06),
-    inset 0 -6px 20px rgba(0,0,0,0.7),
-    0 30px 60px rgba(0,0,0,0.55);
+    inset 0 2px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -8px 24px rgba(0, 0, 0, 0.75),
+    0 36px 70px rgba(0, 0, 0, 0.6),
+    0 12px 0 rgba(0, 0, 0, 0.25);
   position: relative;
 }
 
@@ -249,68 +258,167 @@ html {
   border-radius: 22px;
   background: repeating-linear-gradient(
     115deg,
-    rgba(255,255,255,0.02) 0 2px,
+    rgba(255, 255, 255, 0.025) 0 2px,
     transparent 2px 6px
   );
   pointer-events: none;
+}
+
+.tech-keyboard-board::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 23px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  pointer-events: none;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  padding: 1px;
 }
 
 .light .tech-keyboard-board {
   background: linear-gradient(145deg, #d9c4a7 0%, #b89773 45%, #8f6e4a 100%);
   border-color: #a8845c;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.35),
-    inset 0 -6px 20px rgba(0,0,0,0.15),
-    0 30px 60px rgba(0,0,0,0.25);
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -8px 24px rgba(0, 0, 0, 0.15),
+    0 36px 70px rgba(0, 0, 0, 0.28),
+    0 12px 0 rgba(0, 0, 0, 0.12);
 }
 
 .tech-keyboard-grid {
   display: grid;
   gap: 10px;
   transform-style: preserve-3d;
+  position: relative;
+  z-index: 1;
 }
 
 .tech-key {
+  --key-depth: 12px;
+  --key-bg: #333;
+  --key-glow: rgba(255, 255, 255, 0.15);
   position: relative;
   aspect-ratio: 1 / 1;
-  border-radius: 8px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--key-bg);
   font-weight: 800;
   font-size: clamp(10px, 1.3vw, 15px);
   transform-style: preserve-3d;
-  transform: translateZ(14px);
+  transform: translateZ(20px);
   box-shadow:
-    0 6px 0 rgba(0,0,0,0.55),
-    inset 0 -3px 0 rgba(0,0,0,0.25),
-    inset 0 2px 0 rgba(255,255,255,0.18);
-  transition: transform 80ms ease-out, box-shadow 80ms ease-out, filter 80ms ease-out;
-  cursor: pointer;
+    inset 0 2px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.32),
+    0 var(--key-depth) 0 color-mix(in srgb, var(--key-bg) 55%, black),
+    0 calc(var(--key-depth) + 2px) 0 rgba(0, 0, 0, 0.45),
+    0 calc(var(--key-depth) + 6px) 14px rgba(0, 0, 0, 0.38);
+  transition:
+    transform 120ms ease-out,
+    box-shadow 120ms ease-out,
+    filter 120ms ease-out;
+  cursor: default;
   user-select: none;
-  letter-spacing: 0.02em;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+  overflow: hidden;
 }
 
-/* Only apply hover effects on devices that actually support hover (desktop) */
-@media (hover: hover) and (pointer: fine) {
-  .tech-key {
-    will-change: transform;
-  }
-  .tech-key:hover {
-    transform: translateZ(30px) scale(1.08);
-    box-shadow:
-      0 14px 0 rgba(0,0,0,0.55),
-      inset 0 -3px 0 rgba(0,0,0,0.25),
-      inset 0 2px 0 rgba(255,255,255,0.25),
-      0 0 24px rgba(255,255,255,0.15);
-    filter: brightness(1.15);
-    z-index: 5;
-  }
+.tech-key::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    transparent 45%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  pointer-events: none;
+}
+
+.tech-key::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--key-depth) * -1);
+  height: var(--key-depth);
+  border-radius: 0 0 7px 7px;
+  background: color-mix(in srgb, var(--key-bg) 40%, black);
+  transform: translateZ(-1px);
+  pointer-events: none;
+}
+
+.tech-key--empty {
+  opacity: 0.35;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 4px 0 rgba(0, 0, 0, 0.35),
+    0 6px 10px rgba(0, 0, 0, 0.25);
+}
+
+.tech-key-icon {
+  position: relative;
+  z-index: 2;
+  width: 58%;
+  height: 58%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+  pointer-events: none;
+}
+
+.tech-key-icon--dark-bg {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
 }
 
 .tech-key-label {
+  position: relative;
   z-index: 2;
+  letter-spacing: 0.03em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tech-key:not(.tech-key--empty) {
+    will-change: transform, box-shadow;
+  }
+
+  .tech-key:not(.tech-key--empty):hover {
+    --key-depth: 22px;
+    transform: translateZ(48px) scale(1.08);
+    box-shadow:
+      inset 0 4px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -4px 0 rgba(0, 0, 0, 0.28),
+      inset 0 0 15px var(--key-glow),
+      0 var(--key-depth) 0 color-mix(in srgb, var(--key-bg) 45%, black),
+      0 calc(var(--key-depth) + 3px) 0 rgba(0, 0, 0, 0.6),
+      0 calc(var(--key-depth) + 12px) 25px rgba(0, 0, 0, 0.5),
+      0 0 40px var(--key-glow);
+    filter: brightness(1.25);
+    z-index: 5;
+  }
+
+  .tech-key:not(.tech-key--empty):hover::before {
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.32) 0%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.08) 100%
+    );
+  }
+
+  .tech-key:not(.tech-key--empty):hover .tech-key-icon {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4)) brightness(1.08);
+  }
 }
 
 /* ====================================================
@@ -339,24 +447,40 @@ html {
     perspective: none;
     filter: none;
   }
+
+  .tech-keyboard-float {
+    animation: none !important;
+  }
+
   .tech-keyboard-board {
-    /* Kill the 3D isometric rotation on small screens */
     transform: none !important;
     padding: 14px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
   }
+
   .tech-keyboard-grid {
     transform-style: flat;
     gap: 8px;
   }
+
   .tech-key {
-    /* Remove 3D transform on mobile */
+    --key-depth: 4px;
     transform: none;
     transform-style: flat;
     box-shadow:
-      0 3px 0 rgba(0,0,0,0.4),
-      inset 0 1px 0 rgba(255,255,255,0.12);
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 var(--key-depth) 0 color-mix(in srgb, var(--key-bg) 55%, black),
+      0 calc(var(--key-depth) + 2px) 6px rgba(0, 0, 0, 0.3);
     font-size: 11px;
+  }
+
+  .tech-key::after {
+    display: none;
+  }
+
+  .tech-key-icon {
+    width: 52%;
+    height: 52%;
   }
 
   /* Lighter starfield on phones */
