@@ -13,9 +13,13 @@ const TechKeyIcon = ({ item }) => {
     return <span className="tech-key-label" style={{ color: item?.text ?? "#fff" }}>{item?.short ?? ""}</span>;
   }
 
+  const src = item.icon?.startsWith("http")
+    ? item.icon
+    : `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${item.icon}/${item.icon}-original.svg`;
+
   return (
     <img
-      src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${item.icon}/${item.icon}-original.svg`}
+      src={src}
       alt=""
       className={`tech-key-icon${item.text === "#000" ? " tech-key-icon--dark-bg" : ""}`}
       style={item.invertIcon ? { filter: "invert(1) brightness(2)" } : undefined}

@@ -19,7 +19,7 @@ export const techStack = [
   { name: "JavaScript", category: "Languages", color: "#F7DF1E", short: "JS", bg: "#F7DF1E", text: "#000", icon: "javascript" },
   { name: "Python", category: "Languages", color: "#3776AB", short: "PY", bg: "#3776AB", text: "#FFD43B", icon: "python" },
   { name: "Java", category: "Languages", color: "#EA2D2E", short: "JV", bg: "#EA2D2E", text: "#fff", icon: "java" },
-  { name: "C", category: "Languages", color: "#A8B9CC", short: "C", bg: "#283593", text: "#fff", icon: "c" },
+  { name: "C", category: "Languages", color: "#00599C", short: "C", bg: "#ffffff", text: "#00599C", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-plain.svg" },
 
   // Frontend
   { name: "React", category: "Frontend", color: "#61DAFB", short: "RE", bg: "#20232A", text: "#61DAFB", icon: "react" },
@@ -29,7 +29,7 @@ export const techStack = [
   // Backend
   { name: "Node.js", category: "Backend", color: "#339933", short: "NJ", bg: "#222", text: "#68A063", icon: "nodejs" },
   { name: "Express", category: "Backend", color: "#ffffff", short: "EX", bg: "#1F1F1F", text: "#fff", icon: "express", invertIcon: true },
-  { name: "Flask", category: "Backend", color: "#ffffff", short: "FL", bg: "#111", text: "#fff", icon: "flask", invertIcon: true },
+  { name: "Flask", category: "Backend", color: "#000000", short: "FL", bg: "#ffffff", text: "#000", icon: "flask" },
   { name: "FastAPI", category: "Backend", color: "#009688", short: "FA", bg: "#222", text: "#009688", icon: "fastapi" },
 
   // Databases
@@ -40,13 +40,13 @@ export const techStack = [
   // DevOps
   { name: "Docker", category: "DevOps", color: "#2496ED", short: "DK", bg: "#2496ED", text: "#fff", icon: "docker" },
   { name: "Kafka", category: "DevOps", color: "#231F20", short: "KF", bg: "#231F20", text: "#fff", icon: "apachekafka", invertIcon: true },
-  { name: "Microservices", category: "DevOps", color: "#4A5568", short: "MS", bg: "#4A5568", text: "#fff" },
+  { name: "Microservices", category: "DevOps", color: "#4A5568", short: "MS", bg: "#ffffff", text: "#4A5568", icon: "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/network.svg" },
 
   // Tools
   { name: "Git", category: "Tools", color: "#F05032", short: "GT", bg: "#222", text: "#fff", icon: "git" },
   { name: "GitHub", category: "Tools", color: "#ffffff", short: "GH", bg: "#181717", text: "#fff", icon: "github", invertIcon: true },
   { name: "Postman", category: "Tools", color: "#FF6C37", short: "PM", bg: "#222", text: "#FF6C37", icon: "postman" },
-  { name: "Groq AI", category: "AI", color: "#F55036", short: "GQ", bg: "#F55036", text: "#fff" },
+  { name: "Groq AI", category: "AI", color: "#F55036", short: "GQ", bg: "#ffffff", text: "#F55036", icon: "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/lobe-icons/src/components/Groq/style/logo.svg" },
   { name: "Gemini", category: "AI", color: "#4285F4", short: "GE", bg: "#4285F4", text: "#fff", icon: "google" },
   { name: "Linux", category: "DevOps", color: "#FCC624", short: "LX", bg: "#222", text: "#fff", icon: "linux" },
   { name: "AWS", category: "DevOps", color: "#FF9900", short: "AWS", bg: "#232F3E", text: "#FF9900", icon: "amazonwebservices", invertIcon: false },

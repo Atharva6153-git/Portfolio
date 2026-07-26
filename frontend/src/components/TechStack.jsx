@@ -16,9 +16,13 @@ const TechIcon = ({ tech }) => {
     );
   }
 
+  const src = tech.icon?.startsWith("http")
+    ? tech.icon
+    : `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${tech.icon}/${tech.icon}-original.svg`;
+
   return (
     <img
-      src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${tech.icon}/${tech.icon}-original.svg`}
+      src={src}
       alt={tech.name}
       className="tech-stack-icon"
       style={tech.invertIcon ? { filter: "invert(1) brightness(2)" } : undefined}
