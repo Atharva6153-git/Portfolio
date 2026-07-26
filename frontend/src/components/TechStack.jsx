@@ -61,6 +61,7 @@ const TechStack = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.03, duration: 0.4 }}
               className="tech-stack-card group"
+              style={{ "--tech-color": t.color }}
             >
               <TechIcon tech={t} />
               <p className="tech-stack-label">{t.name}</p>
