@@ -50,13 +50,18 @@ const TechKey = ({ item, index, isMobile }) => {
   const layers = Array.from({ length: depth });
 
   return (
-    <div className={keyClass} style={{ ...style, transformStyle: "preserve-3d", position: "relative" }} title={item?.name}>
+    <motion.div 
+      className={keyClass} 
+      style={{ ...style, transformStyle: "preserve-3d", position: "relative" }} 
+      title={item?.name}
+      whileHover={!isMobile && !isEmpty ? "hover" : undefined}
+    >
       <motion.div
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        whileHover={!isMobile && !isEmpty ? { z: -4, scale: 0.98 } : undefined}
+        variants={{ hover: { z: -6, scale: 0.96 } }}
         transition={{ delay: 0.4 + index * 0.03, duration: 0.5, ease: "easeOut" }}
-        style={{ width: "100%", height: "100%", transformStyle: "preserve-3d" }}
+        style={{ width: "100%", height: "100%", transformStyle: "preserve-3d", pointerEvents: "none" }}
       >
         {layers.map((_, d) => (
           <div
@@ -79,7 +84,16 @@ const TechKey = ({ item, index, isMobile }) => {
           </div>
         ))}
       </motion.div>
-    </div>
+      {/* Invisible static hit area for stable hover and 3D depth sorting */}
+      <div 
+        style={{ 
+          position: 'absolute', 
+          inset: 0, 
+          transform: `translateZ(${depth}px)`, 
+          cursor: isEmpty ? 'default' : 'pointer' 
+        }} 
+      />
+    </motion.div>
   );
 };
 
