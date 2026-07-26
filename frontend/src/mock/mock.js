@@ -28,8 +28,8 @@ export const techStack = [
 
   // Backend
   { name: "Node.js", category: "Backend", color: "#339933", short: "NJ", bg: "#222", text: "#68A063", icon: "nodejs" },
-  { name: "Express", category: "Backend", color: "#000000", short: "EX", bg: "#1F1F1F", text: "#fff", icon: "express", invertIcon: true },
-  { name: "Flask", category: "Backend", color: "#000000", short: "FL", bg: "#111", text: "#fff", icon: "flask", invertIcon: true },
+  { name: "Express", category: "Backend", color: "#ffffff", short: "EX", bg: "#1F1F1F", text: "#fff", icon: "express", invertIcon: true },
+  { name: "Flask", category: "Backend", color: "#ffffff", short: "FL", bg: "#111", text: "#fff", icon: "flask", invertIcon: true },
   { name: "FastAPI", category: "Backend", color: "#009688", short: "FA", bg: "#222", text: "#009688", icon: "fastapi" },
 
   // Databases
@@ -44,7 +44,7 @@ export const techStack = [
 
   // Tools
   { name: "Git", category: "Tools", color: "#F05032", short: "GT", bg: "#222", text: "#fff", icon: "git" },
-  { name: "GitHub", category: "Tools", color: "#181717", short: "GH", bg: "#181717", text: "#fff", icon: "github", invertIcon: true },
+  { name: "GitHub", category: "Tools", color: "#ffffff", short: "GH", bg: "#181717", text: "#fff", icon: "github", invertIcon: true },
   { name: "Postman", category: "Tools", color: "#FF6C37", short: "PM", bg: "#222", text: "#FF6C37", icon: "postman" },
   { name: "Groq AI", category: "AI", color: "#F55036", short: "GQ", bg: "#F55036", text: "#fff" },
   { name: "Gemini", category: "AI", color: "#4285F4", short: "GE", bg: "#4285F4", text: "#fff", icon: "google" },
