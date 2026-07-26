@@ -48,6 +48,8 @@ export const techStack = [
   { name: "Postman", category: "Tools", color: "#FF6C37", short: "PM", bg: "#FF6C37", text: "#fff", icon: "postman" },
   { name: "Groq AI", category: "AI", color: "#F55036", short: "GQ", bg: "#F55036", text: "#fff" },
   { name: "Gemini", category: "AI", color: "#4285F4", short: "GE", bg: "#4285F4", text: "#fff", icon: "google" },
+  { name: "Linux", category: "DevOps", color: "#FCC624", short: "LX", bg: "#222", text: "#fff", icon: "linux" },
+  { name: "AWS", category: "DevOps", color: "#FF9900", short: "AW", bg: "#232F3E", text: "#FF9900", icon: "amazonwebservices", invertIcon: true },
 ];
 
 export const techCategories = [

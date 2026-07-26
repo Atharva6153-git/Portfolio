@@ -10,7 +10,7 @@ const TechKeyIcon = ({ item }) => {
   const [error, setError] = useState(false);
 
   if (!item?.icon || error) {
-    return <span className="tech-key-label">{item?.short ?? ""}</span>;
+    return <span className="tech-key-label" style={{ color: item?.text ?? "#fff" }}>{item?.short ?? ""}</span>;
   }
 
   return (
