@@ -120,8 +120,8 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 20px 12px;
+  gap: 16px;
+  padding: 30px 16px;
   border-radius: 14px;
   border: 1px solid hsl(var(--border) / 0.6);
   background:
@@ -143,15 +143,15 @@ html {
 .tech-stack-icon {
   position: relative;
   z-index: 1;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
 }
 
 @media (min-width: 768px) {
   .tech-stack-icon {
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
   }
 }
 
@@ -179,7 +179,7 @@ html {
 .tech-stack-label {
   position: relative;
   z-index: 1;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   text-align: center;
   color: hsl(var(--foreground) / 0.85);
@@ -188,7 +188,7 @@ html {
 
 @media (min-width: 768px) {
   .tech-stack-label {
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 

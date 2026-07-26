@@ -21,6 +21,7 @@ const TechIcon = ({ tech }) => {
       src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${tech.icon}/${tech.icon}-original.svg`}
       alt={tech.name}
       className="tech-stack-icon"
+      style={tech.invertIcon ? { filter: "invert(1) brightness(2)" } : undefined}
       loading="lazy"
       onError={() => setError(true)}
     />
@@ -66,33 +67,6 @@ const TechStack = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {techCategories.map((cat, i) => (
-            <motion.div
-              key={cat.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="p-6 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--foreground))]/30 transition-colors"
-            >
-              <p className="text-xs uppercase tracking-widest text-[hsl(var(--muted-foreground))] mb-3">
-                {cat.title}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {cat.items.map((item) => (
-                  <span
-                    key={item}
-                    className="px-3 py-1 rounded-full text-xs font-medium bg-[hsl(var(--muted))] text-[hsl(var(--foreground))]/90 border border-[hsl(var(--border))]"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );

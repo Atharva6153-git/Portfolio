@@ -18,6 +18,7 @@ const TechKeyIcon = ({ item }) => {
       src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${item.icon}/${item.icon}-original.svg`}
       alt=""
       className={`tech-key-icon${item.text === "#000" ? " tech-key-icon--dark-bg" : ""}`}
+      style={item.invertIcon ? { filter: "invert(1) brightness(2)" } : undefined}
       loading="lazy"
       draggable={false}
       onError={() => setError(true)}
