@@ -351,7 +351,6 @@ html {
   }
 
   .tech-key:not(.tech-key--empty):hover {
-    transform: translateZ(48px) scale(1.08);
     filter: brightness(1.25);
     z-index: 5;
   }

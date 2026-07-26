@@ -53,6 +53,7 @@ const TechKey = ({ item, index, isMobile }) => {
     <motion.div
       initial={{ y: -30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
+      whileHover={!isMobile && !isEmpty ? { z: 28, scale: 1.08 } : undefined}
       transition={{ delay: 0.4 + index * 0.03, duration: 0.5, ease: "easeOut" }}
       className={keyClass}
       style={{ ...style, transformStyle: "preserve-3d" }}

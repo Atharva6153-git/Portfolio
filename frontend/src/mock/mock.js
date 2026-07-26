@@ -27,7 +27,7 @@ export const techStack = [
   { name: "Bootstrap", category: "Frontend", color: "#7952B3", short: "BS", bg: "#7952B3", text: "#fff", icon: "bootstrap" },
 
   // Backend
-  { name: "Node.js", category: "Backend", color: "#339933", short: "NJ", bg: "#1A2E1A", text: "#68A063", icon: "nodejs" },
+  { name: "Node.js", category: "Backend", color: "#339933", short: "NJ", bg: "#222", text: "#68A063", icon: "nodejs" },
   { name: "Express", category: "Backend", color: "#000000", short: "EX", bg: "#1F1F1F", text: "#fff", icon: "express", invertIcon: true },
   { name: "Flask", category: "Backend", color: "#000000", short: "FL", bg: "#111", text: "#fff", icon: "flask", invertIcon: true },
   { name: "FastAPI", category: "Backend", color: "#009688", short: "FA", bg: "#009688", text: "#fff", icon: "fastapi" },
@@ -43,13 +43,13 @@ export const techStack = [
   { name: "Microservices", category: "DevOps", color: "#4A5568", short: "MS", bg: "#4A5568", text: "#fff" },
 
   // Tools
-  { name: "Git", category: "Tools", color: "#F05032", short: "GT", bg: "#F05032", text: "#fff", icon: "git" },
+  { name: "Git", category: "Tools", color: "#F05032", short: "GT", bg: "#222", text: "#fff", icon: "git" },
   { name: "GitHub", category: "Tools", color: "#181717", short: "GH", bg: "#181717", text: "#fff", icon: "github", invertIcon: true },
   { name: "Postman", category: "Tools", color: "#FF6C37", short: "PM", bg: "#FF6C37", text: "#fff", icon: "postman" },
   { name: "Groq AI", category: "AI", color: "#F55036", short: "GQ", bg: "#F55036", text: "#fff" },
   { name: "Gemini", category: "AI", color: "#4285F4", short: "GE", bg: "#4285F4", text: "#fff", icon: "google" },
   { name: "Linux", category: "DevOps", color: "#FCC624", short: "LX", bg: "#222", text: "#fff", icon: "linux" },
-  { name: "AWS", category: "DevOps", color: "#FF9900", short: "AW", bg: "#232F3E", text: "#FF9900", icon: "amazonwebservices", invertIcon: true },
+  { name: "AWS", category: "DevOps", color: "#FF9900", short: "AW", bg: "#232F3E", text: "#FF9900", icon: "amazonwebservices", invertIcon: false },
 ];
 
 export const techCategories = [
