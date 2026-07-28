@@ -12,7 +12,7 @@
 
 <br />
 
-**🌐 Live Demo** · _add your Vercel URL here_  &nbsp;·&nbsp;  **📫 Contact** · [atharvaj7822@gmail.com](mailto:atharvaj7822@gmail.com)
+**🌐 Live Demo** · https://portfolio-apexgg.vercel.app/  &nbsp;·&nbsp;  **📫 Contact** · [atharvaj7822@gmail.com](mailto:atharvaj7822@gmail.com)
 
 </div>
 
