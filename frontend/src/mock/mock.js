@@ -82,13 +82,17 @@ export const techCategories = [
 export const projects = [
   {
     id: 1,
-    title: "Crypto Pulse",
-    description: "A real-time cryptocurrency tracking application that provides live market data, price alerts, and portfolio management. Built with modern web technologies for a fast, responsive experience.",
-    tech: ["React", "Node.js", "MongoDB", "REST API"],
-    github: "https://github.com/Atharva6153-git/Crypto-Pulse",
-    live: null,
-    highlight: "Fintech",
-    year: "2024",
+    title: "ZenoGuard",
+    description: "AI-powered blockchain micro-insurance platform for gig workers. Built with personalized risk-based pricing, automated KYC verification, claim verification, and blockchain-enforced payouts. Backend: FastAPI + PostgreSQL + ML services + Web3.py",
+    tech: ["React", "FastAPI", "PostgreSQL", "Solidity", "Web3.py", "Razorpay", "YOLO", "Cloudinary"],
+    github: "https://github.com/Shreyas-patil07/ZenoGuard_final",
+    live: "https://zeno-guard.vercel.app/",
+    highlight: "Antilabs Hackathon",
+    year: "2026",
+    featured: {
+      frontend: ["React", "Vite", "Tailwind CSS", "Axios"],
+      backend: ["FastAPI", "SQLAlchemy", "JWT", "Pydantic", "YOLO DL Detection", "Tesseract OCR"]
+    }
   },
   {
     id: 2,
