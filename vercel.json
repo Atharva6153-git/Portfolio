@@ -1,6 +1,3 @@
 {
-  "rootDirectory": "frontend",
-  "buildCommand": "npm run build",
-  "outputDirectory": "build",
-  "installCommand": "npm install --legacy-peer-deps"
+  "rootDirectory": "frontend"
 }
