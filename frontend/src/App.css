@@ -448,3 +448,223 @@ body {
 body {
   overflow-x: hidden;
 }
+
+/* ==============================
+   Achievements Section
+   ============================== */
+
+/* Stack Narrative Cards */
+.narrative-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .narrative-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+.narrative-card {
+  position: relative;
+  padding: 28px 24px;
+  border-radius: 16px;
+  border: 1px solid hsl(var(--border) / 0.4);
+  background: hsl(var(--card));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.narrative-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--narrative-color, hsl(var(--foreground)));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  border-radius: 16px 16px 0 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .narrative-card:hover {
+    border-color: color-mix(in srgb, var(--narrative-color, hsl(var(--foreground))) 40%, transparent);
+    box-shadow: 0 8px 32px color-mix(in srgb, var(--narrative-color, hsl(var(--foreground))) 10%, transparent);
+    transform: translateY(-4px);
+  }
+
+  .narrative-card:hover::after {
+    opacity: 1;
+  }
+}
+
+.narrative-card-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--narrative-color, hsl(var(--foreground))) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--narrative-color, hsl(var(--foreground))) 25%, transparent);
+}
+
+.narrative-card-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--narrative-color, hsl(var(--foreground)));
+}
+
+.narrative-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  letter-spacing: -0.01em;
+}
+
+.narrative-card-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: hsl(var(--muted-foreground));
+  flex: 1;
+}
+
+.narrative-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.narrative-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 99px;
+  border: 1px solid hsl(var(--border) / 0.5);
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--muted) / 0.5);
+  letter-spacing: 0.02em;
+}
+
+/* Hackathon Cards */
+.hackathon-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .hackathon-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hackathon-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+
+.hackathon-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px;
+  border-radius: 14px;
+  border: 1px solid hsl(var(--border) / 0.35);
+  background: hsl(var(--card));
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hackathon-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.hackathon-card--gold {
+  border-color: rgba(234, 179, 8, 0.35);
+  background: color-mix(in srgb, rgba(234, 179, 8, 0.06) 100%, hsl(var(--card)));
+}
+
+.hackathon-card--silver {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: color-mix(in srgb, rgba(148, 163, 184, 0.06) 100%, hsl(var(--card)));
+}
+
+/* Achievement Badge */
+.achievement-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  width: fit-content;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.achievement-badge--gold {
+  background: rgba(234, 179, 8, 0.15);
+  color: #ca8a04;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.light .achievement-badge--gold {
+  background: rgba(234, 179, 8, 0.12);
+  color: #92680a;
+}
+
+.achievement-badge--silver {
+  background: rgba(148, 163, 184, 0.12);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.light .achievement-badge--silver {
+  color: #64748b;
+}
+
+.achievement-badge--neutral {
+  background: hsl(var(--muted) / 0.6);
+  color: hsl(var(--muted-foreground));
+  border: 1px solid hsl(var(--border) / 0.4);
+}
+
+.hackathon-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hackathon-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  letter-spacing: -0.01em;
+}
+
+.hackathon-card-org {
+  font-size: 12px;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  letter-spacing: 0.01em;
+}
+
+.hackathon-card-desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: hsl(var(--muted-foreground) / 0.85);
+  margin-top: 4px;
+}

@@ -122,6 +122,68 @@ export const projects = [
   },
 ];
 
+export const stackNarratives = [
+  {
+    title: "Full Stack Apps",
+    description: "End-to-end web apps from responsive UIs to scalable APIs and persistent data layers.",
+    stack: ["React", "Node.js", "Express", "MongoDB", "PostgreSQL"],
+    color: "#61DAFB",
+    icon: "layers",
+  },
+  {
+    title: "AI-Powered Products",
+    description: "Intelligent applications powered by LLMs — from medical chatbots to smart recommendation engines.",
+    stack: ["Python", "Flask", "FastAPI", "Gemini API", "Groq AI"],
+    color: "#A855F7",
+    icon: "sparkles",
+  },
+  {
+    title: "Scalable Infrastructure",
+    description: "Production-grade architectures using containers, message queues, and microservice patterns.",
+    stack: ["Docker", "Kafka", "Microservices", "AWS", "Linux"],
+    color: "#F97316",
+    icon: "server",
+  },
+];
+
+export const hackathons = [
+  {
+    name: "Rkdemy Hackathon",
+    result: "Winner",
+    tier: "gold",
+    description: "Built and shipped a winning product from scratch.",
+    org: "Rkdemy",
+  },
+  {
+    name: "Antilabs Hackathon",
+    result: "Finalist",
+    tier: "silver",
+    description: "Shortlisted among top teams out of all participants.",
+    org: "Antilabs",
+  },
+  {
+    name: "Google Developer Hackathon",
+    result: "Participated",
+    tier: "neutral",
+    description: "24-hour build sprint at NMIMS Mumbai, organized by Google Developers.",
+    org: "Google Developers · NMIMS Mumbai",
+  },
+  {
+    name: "AWS Bharat Hackathon",
+    result: "Participated",
+    tier: "neutral",
+    description: "National-level cloud-focused hackathon organized by Amazon Web Services.",
+    org: "Amazon Web Services",
+  },
+  {
+    name: "Smart India Hackathon 2025",
+    result: "Participated",
+    tier: "neutral",
+    description: "India's largest hackathon, solving real government and industry problem statements.",
+    org: "Ministry of Education · Govt. of India",
+  },
+];
+
 export const emailjsConfig = {
   // Replace these with your actual EmailJS credentials
   serviceId: process.env.REACT_APP_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID",
