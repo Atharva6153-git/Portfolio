@@ -103,6 +103,10 @@ export const projects = [
     live: "https://e-commerce-apexgg.vercel.app/",
     highlight: "Commerce",
     year: "2026",
+    featured: {
+      frontend: ["React", "Tailwind CSS", "Axios"],
+      backend: ["Express.js", "MongoDB", "JWT", "Stripe"]
+    }
   },
   {
     id: 3,
@@ -113,6 +117,10 @@ export const projects = [
     live: "https://b-bot-medguide.onrender.com/",
     highlight: "AI / Health",
     year: "2026",
+    featured: {
+      frontend: ["React", "Tailwind CSS", "Axios"],
+      backend: ["Flask", "Python", "Gemini API", "SQLAlchemy"]
+    }
   },
   {
     id: 4,
@@ -123,6 +131,10 @@ export const projects = [
     live: "https://www.teamgambit.tech/home",
     highlight: "Hackathon",
     year: "2026",
+    featured: {
+      frontend: ["React", "Tailwind CSS", "Firebase"],
+      backend: ["Node.js", "Express.js", "MongoDB", "JWT"]
+    }
   },
 ];
 
