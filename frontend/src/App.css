@@ -205,164 +205,23 @@ html {
 }
 
 /* ==============================
-   3D Tech Keyboard
+   3D Tech Keyboard (Spline)
    ============================== */
 .tech-keyboard-scene {
-  perspective: 1200px;
-  perspective-origin: 50% 30%;
   width: 100%;
-  max-width: 580px;
+  max-width: 600px;
   aspect-ratio: 1 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Rich ambient shadow underneath the board */
-  filter: drop-shadow(0 60px 80px rgba(0, 0, 0, 0.75))
-          drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
-}
-
-.tech-keyboard-float {
-  transform-style: preserve-3d;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tech-keyboard-board {
-  width: 90%;
-  /* Extra bottom padding to show key side faces */
-  padding: 20px 20px 36px 20px;
-  border-radius: 20px;
-  transform-style: preserve-3d;
-
-  /* Heavy dark board — carbon-fibre look */
-  background:
-    repeating-linear-gradient(
-      115deg,
-      rgba(255, 255, 255, 0.018) 0px,
-      rgba(255, 255, 255, 0.018) 1px,
-      transparent 1px,
-      transparent 5px
-    ),
-    linear-gradient(160deg, #252520 0%, #141410 50%, #0c0c09 100%);
-
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-
-  /* The thick base slab — most important for the "heavy" look */
-  box-shadow:
-    /* Top surface sheen */
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    /* Inner depth shadow */
-    inset 0 -12px 28px rgba(0, 0, 0, 0.7),
-    /* Thick base layers */
-    0 8px  0 #0e0e0b,
-    0 16px 0 #0a0a08,
-    0 20px 0 #070706,
-    /* Ambient ground shadow */
-    0 28px 60px rgba(0, 0, 0, 0.8),
-    0 40px 80px rgba(0, 0, 0, 0.5);
-
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Top-left corner highlight */
-.tech-keyboard-board::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.07) 0%,
-    transparent 35%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Board rim — bottom face of the slab */
-.tech-keyboard-board::after {
-  content: "";
-  position: absolute;
-  left: 4px;
-  right: 4px;
-  bottom: -22px;
-  height: 22px;
-  border-radius: 0 0 16px 16px;
-  background: linear-gradient(180deg, #0a0a08 0%, #050504 100%);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  border-top: none;
-  z-index: -1;
-}
-
-.light .tech-keyboard-board {
-  background:
-    repeating-linear-gradient(
-      115deg,
-      rgba(255, 255, 255, 0.04) 0px,
-      rgba(255, 255, 255, 0.04) 1px,
-      transparent 1px,
-      transparent 5px
-    ),
-    linear-gradient(160deg, #c8b49a 0%, #a07d58 50%, #7a5c3a 100%);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -12px 28px rgba(0, 0, 0, 0.2),
-    0 8px  0 #5c3e22,
-    0 16px 0 #4a3019,
-    0 20px 0 #3a2410,
-    0 28px 60px rgba(0, 0, 0, 0.4),
-    0 40px 80px rgba(0, 0, 0, 0.25);
-}
-
-.light .tech-keyboard-board::after {
-  background: linear-gradient(180deg, #5c3e22 0%, #3a2410 100%);
-}
-
-/* ====================================================
-   MOBILE OPTIMIZATIONS — prevent iOS Safari crashes
-   ==================================================== */
-
-/* Tablets and below: simplify keyboard */
-@media (max-width: 1024px) {
-  .tech-keyboard-scene {
-    max-width: 480px;
-    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.6));
-  }
-  .tech-keyboard-board {
-    padding: 16px 16px 28px 16px;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.08),
-      inset 0 -8px 20px rgba(0,0,0,0.6),
-      0 6px 0 #0e0e0b,
-      0 12px 0 #070706,
-      0 20px 40px rgba(0,0,0,0.7);
-  }
-}
-
-/* Small phones: flatten 3D entirely to avoid GPU overload */
+/* Reduce backdrop blur on mobile — very expensive on iOS Safari */
 @media (max-width: 640px) {
-  .tech-keyboard-scene {
-    max-width: 360px;
-    perspective: none;
-    filter: none;
-  }
-
-  .tech-keyboard-float {
-    animation: none !important;
-  }
-
-  .tech-keyboard-board {
-    transform: none !important;
-    padding: 14px 14px 14px 14px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-  }
-
-  .tech-keyboard-board::after {
-    display: none;
+  .mobile-lite-blur {
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
   }
 
   /* Lighter starfield on phones */
@@ -370,12 +229,6 @@ html {
     opacity: 0.3;
     animation: none;
     background-size: 800px 300px;
-  }
-
-  /* Reduce backdrop blur — very expensive on iOS Safari */
-  .mobile-lite-blur {
-    backdrop-filter: blur(6px) !important;
-    -webkit-backdrop-filter: blur(6px) !important;
   }
 }
 

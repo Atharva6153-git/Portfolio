@@ -1,254 +1,262 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
-import { techStack } from "../mock/mock";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Application } from "@splinetool/runtime";
+import { motion, AnimatePresence } from "framer-motion";
 
-const COLS = 6;
-const ROWS = 4;
-const TOTAL = COLS * ROWS;
-
-// How tall the keycap is in px (the visible side thickness)
-const KEY_DEPTH = 10;
-
-const TechKeyIcon = ({ item }) => {
-  const [error, setError] = useState(false);
-
-  if (!item?.icon || error) {
-    return (
-      <span
-        style={{
-          color: item?.text ?? "#fff",
-          fontWeight: 800,
-          fontSize: "clamp(9px, 1.1vw, 13px)",
-          letterSpacing: "0.03em",
-          lineHeight: 1,
-          userSelect: "none",
-          textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-        }}
-      >
-        {item?.short ?? ""}
-      </span>
-    );
-  }
-
-  const src = item.icon?.startsWith("http")
-    ? item.icon
-    : `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${item.icon}/${item.icon}-original.svg`;
-
-  return (
-    <img
-      src={src}
-      alt=""
-      style={{
-        width: "52%",
-        height: "52%",
-        objectFit: "contain",
-        pointerEvents: "none",
-        userSelect: "none",
-        filter: item.invertIcon ? "invert(1) brightness(2)" : undefined,
-        display: "block",
-      }}
-      loading="lazy"
-      draggable={false}
-      onError={() => setError(true)}
-    />
-  );
-};
+const Spline = React.lazy(() => import("@splinetool/react-spline"));
 
 /**
- * A single keycap rendered with real CSS 3D faces:
- *   - top face   (the visible surface with the icon)
- *   - front face (bottom-facing thick edge visible in isometric view)
- *   - right face (right-facing thick edge visible in isometric view)
- *
- * Hover: key translates DOWN along Y (pressed effect) and the side faces shrink.
+ * Maps your techStack names to the keycap object names baked into the
+ * skills-keyboard.spline scene (Naresh Khatri's open-source MIT scene).
+ * Keys that don't have a matching keycap in the scene are unmapped but still
+ * show up in the hover tooltip via the mouseHover event name fallback.
  */
-const TechKey = ({ item, index, isMobile }) => {
-  const isEmpty = !item;
-  const bg = isEmpty ? "#18181b" : item.bg;
-  // Darken bg for side faces
-  const sideBg = isEmpty
-    ? "#0a0a0c"
-    : `color-mix(in srgb, ${bg} 45%, #000)`;
+const SKILL_MAP = {
+  // object name in Spline scene → display info
+  js:         { label: "JavaScript",    color: "#F7DF1E", desc: "Dynamic scripting language powering the web." },
+  python:     { label: "Python",        color: "#3776AB", desc: "Versatile language for backend, AI & scripting." },
+  java:       { label: "Java",          color: "#EA2D2E", desc: "Strongly typed OOP language for enterprise apps." },
+  react:      { label: "React",         color: "#61DAFB", desc: "Component-driven UI library for modern web apps." },
+  tailwind:   { label: "Tailwind CSS",  color: "#06B6D4", desc: "Utility-first CSS for rapid, consistent styling." },
+  bootstrap:  { label: "Bootstrap",     color: "#7952B3", desc: "Classic CSS framework for responsive layouts." },
+  nodejs:     { label: "Node.js",       color: "#339933", desc: "JavaScript runtime for scalable server-side apps." },
+  express:    { label: "Express",       color: "#ffffff", desc: "Minimalist Node.js web framework for REST APIs." },
+  mongodb:    { label: "MongoDB",       color: "#47A248", desc: "Flexible NoSQL document database." },
+  postgres:   { label: "PostgreSQL",    color: "#336791", desc: "Powerful open-source relational database." },
+  firebase:   { label: "Firebase",      color: "#FFCA28", desc: "Google's BaaS — auth, DB, and hosting in one." },
+  docker:     { label: "Docker",        color: "#2496ED", desc: "Container platform for consistent deployments." },
+  git:        { label: "Git",           color: "#F05032", desc: "Version control system for tracking code changes." },
+  github:     { label: "GitHub",        color: "#ffffff", desc: "Remote hosting and collaboration for Git repos." },
+  linux:      { label: "Linux",         color: "#FCC624", desc: "Open-source OS powering most production servers." },
+  aws:        { label: "AWS",           color: "#FF9900", desc: "Amazon's cloud platform for scalable infrastructure." },
+};
 
-  const [pressed, setPressed] = useState(false);
-
-  // Auto-press animation — stagger each key sequentially on mount
-  useEffect(() => {
-    if (isMobile || isEmpty) return;
-    const delay = 800 + index * 60;
-    const timer = setTimeout(() => {
-      setPressed(true);
-      setTimeout(() => setPressed(false), 180);
-    }, delay);
-    return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile]);
-
-  const pressDepth = pressed ? KEY_DEPTH - 2 : 0;
-
-  if (isMobile) {
-    // Simple flat key for mobile — no GPU-heavy transforms
-    return (
-      <div
+const SkillTooltip = ({ skill }) => (
+  <AnimatePresence>
+    {skill && (
+      <motion.div
+        key={skill.label}
+        initial={{ opacity: 0, y: 12, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 8, scale: 0.95 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         style={{
-          aspectRatio: "1/1",
-          borderRadius: 7,
-          background: bg,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: isEmpty
-            ? "none"
-            : `0 ${KEY_DEPTH / 2}px 0 ${sideBg}, 0 ${KEY_DEPTH / 2 + 2}px 6px rgba(0,0,0,0.5)`,
-          opacity: isEmpty ? 0.25 : 1,
+          position: "absolute",
+          bottom: "0%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          pointerEvents: "none",
+          zIndex: 20,
+          minWidth: 200,
+          maxWidth: 260,
         }}
       >
-        {!isEmpty && <TechKeyIcon item={item} />}
+        <div
+          style={{
+            background: "rgba(10, 10, 14, 0.92)",
+            backdropFilter: "blur(12px)",
+            border: `1px solid ${skill.color}55`,
+            borderRadius: 14,
+            padding: "12px 16px",
+            boxShadow: `0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px ${skill.color}22`,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                background: skill.color,
+                flexShrink: 0,
+                boxShadow: `0 0 8px ${skill.color}`,
+              }}
+            />
+            <span style={{
+              color: "#fff",
+              fontWeight: 700,
+              fontSize: 14,
+              fontFamily: "Space Grotesk, Inter, sans-serif",
+              letterSpacing: "-0.01em",
+            }}>
+              {skill.label}
+            </span>
+          </div>
+          <p style={{
+            color: "rgba(255,255,255,0.6)",
+            fontSize: 12,
+            lineHeight: 1.5,
+            margin: 0,
+            fontFamily: "Inter, sans-serif",
+          }}>
+            {skill.desc}
+          </p>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
+const TechKeyboard = () => {
+  const splineRef = useRef(null);
+  const [splineApp, setSplineApp] = useState(null);
+  const [hoveredSkill, setHoveredSkill] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const onLoad = (app) => {
+    setSplineApp(app);
+    setLoaded(true);
+
+    // Hover: show tooltip
+    app.addEventListener("mouseHover", (e) => {
+      const name = e?.target?.name;
+      const skill = SKILL_MAP[name];
+      setHoveredSkill(skill ?? null);
+    });
+
+    // Key press: also show tooltip (physical keyboard press)
+    app.addEventListener("keyDown", (e) => {
+      const name = e?.target?.name;
+      const skill = SKILL_MAP[name];
+      if (skill) setHoveredSkill(skill);
+    });
+
+    app.addEventListener("keyUp", () => {
+      setHoveredSkill(null);
+    });
+  };
+
+  // Don't render Spline at all on mobile — use simple grid fallback
+  if (isMobile) {
+    return (
+      <div className="tech-keyboard-scene" style={{ aspectRatio: "unset", maxWidth: "100%" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 8,
+          padding: 16,
+          borderRadius: 16,
+          background: "hsl(var(--card))",
+          border: "1px solid hsl(var(--border)/0.4)",
+        }}>
+          {Object.entries(SKILL_MAP).map(([key, skill]) => (
+            <div key={key} style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 4,
+              padding: "8px 4px",
+              borderRadius: 10,
+              background: `${skill.color}18`,
+              border: `1px solid ${skill.color}33`,
+            }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: skill.color, textAlign: "center", lineHeight: 1.2 }}>
+                {skill.label}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
     <div
+      className="tech-keyboard-scene"
       style={{
-        aspectRatio: "1/1",
         position: "relative",
-        transformStyle: "preserve-3d",
-        cursor: isEmpty ? "default" : "pointer",
-        opacity: isEmpty ? 0.2 : 1,
+        width: "100%",
+        maxWidth: 600,
+        aspectRatio: "1 / 1",
+        borderRadius: 20,
+        overflow: "visible",
       }}
-      title={item?.name}
-      onMouseEnter={() => !isEmpty && setPressed(true)}
-      onMouseLeave={() => !isEmpty && setPressed(false)}
     >
-      {/* === TOP FACE === */}
-      <motion.div
-        animate={{ y: pressDepth }}
-        transition={{ duration: 0.1, ease: "easeOut" }}
-        style={{
+      {/* Loading skeleton */}
+      {!loaded && (
+        <div style={{
           position: "absolute",
           inset: 0,
-          borderRadius: 8,
-          background: bg,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          transformStyle: "preserve-3d",
-          // Top highlight edge
-          boxShadow: pressed
-            ? `inset 0 -1px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)`
-            : `inset 0 2px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.3)`,
-          zIndex: 3,
-        }}
-      >
-        {!isEmpty && <TechKeyIcon item={item} />}
-      </motion.div>
-
-      {/* === FRONT FACE (bottom edge, the thick side you see from below in isometric) === */}
-      <motion.div
-        animate={{ scaleY: pressed ? 0.15 : 1, y: pressed ? pressDepth : 0 }}
-        transition={{ duration: 0.1, ease: "easeOut" }}
-        style={{
-          position: "absolute",
-          left: 2,
-          right: 2,
-          bottom: -KEY_DEPTH,
-          height: KEY_DEPTH,
-          borderRadius: "0 0 6px 6px",
-          background: sideBg,
-          transformOrigin: "top",
-          zIndex: 1,
-        }}
-      />
-
-      {/* === RIGHT FACE (right edge side) === */}
-      <motion.div
-        animate={{ scaleX: pressed ? 0.15 : 1, y: pressed ? pressDepth : 0 }}
-        transition={{ duration: 0.1, ease: "easeOut" }}
-        style={{
-          position: "absolute",
-          top: 2,
-          bottom: -KEY_DEPTH + 2,
-          right: -KEY_DEPTH,
-          width: KEY_DEPTH,
-          borderRadius: "0 6px 6px 0",
-          background: `color-mix(in srgb, ${sideBg} 80%, #111)`,
-          transformOrigin: "left",
-          zIndex: 2,
-        }}
-      />
-    </div>
-  );
-};
-
-const TechKeyboard = () => {
-  const items = [...techStack];
-  while (items.length < TOTAL) items.push(null);
-
-  const [isMobile, setIsMobile] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const checkMotion = () => setReducedMotion(motionQuery.matches);
-
-    checkMobile();
-    checkMotion();
-    window.addEventListener("resize", checkMobile);
-    motionQuery.addEventListener("change", checkMotion);
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-      motionQuery.removeEventListener("change", checkMotion);
-    };
-  }, []);
-
-  const boardInitial = isMobile
-    ? { opacity: 0, scale: 0.95 }
-    : { opacity: 0, scale: 0.88, rotateX: 55, rotateZ: -28 };
-
-  const boardAnimate = isMobile
-    ? { opacity: 1, scale: 1 }
-    : { opacity: 1, scale: 1, rotateX: 55, rotateZ: -28 };
-
-  return (
-    <div className="tech-keyboard-scene" aria-hidden="true">
-      <motion.div
-        className="tech-keyboard-float"
-        animate={
-          isMobile || reducedMotion
-            ? undefined
-            : { y: [0, -8, 0] }
-        }
-        transition={
-          isMobile || reducedMotion
-            ? undefined
-            : { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.8 }
-        }
-      >
-        <motion.div
-          initial={boardInitial}
-          animate={boardAnimate}
-          transition={{ duration: isMobile ? 0.5 : 1.3, ease: [0.22, 1, 0.36, 1] }}
-          className="tech-keyboard-board"
-        >
-          {/* Key grid — extra padding to show side faces */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-              gap: isMobile ? 8 : 12,
-              // Bottom/right padding to avoid clipping the side faces
-              paddingBottom: isMobile ? 4 : KEY_DEPTH + 4,
-              paddingRight: isMobile ? 4 : KEY_DEPTH + 4,
-            }}
-          >
-            {items.slice(0, TOTAL).map((item, i) => (
-              <TechKey key={i} item={item} index={i} isMobile={isMobile} />
-            ))}
+          borderRadius: 20,
+          background: "hsl(var(--card))",
+          border: "1px solid hsl(var(--border)/0.3)",
+        }}>
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 12,
+            color: "hsl(var(--muted-foreground))",
+          }}>
+            <div style={{
+              width: 32,
+              height: 32,
+              border: "2px solid hsl(var(--border))",
+              borderTopColor: "hsl(var(--foreground))",
+              borderRadius: "50%",
+              animation: "spin 0.8s linear infinite",
+            }} />
+            <span style={{ fontSize: 13 }}>Loading keyboard…</span>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      )}
+
+      {/* Spline 3D Scene */}
+      <Suspense fallback={null}>
+        <Spline
+          ref={splineRef}
+          scene="/skills-keyboard.spline"
+          onLoad={onLoad}
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: 20,
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 0.4s ease",
+          }}
+        />
+      </Suspense>
+
+      {/* Skill Tooltip overlay */}
+      <SkillTooltip skill={hoveredSkill} />
+
+      {/* Hint text */}
+      {loaded && !hoveredSkill && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          style={{
+            position: "absolute",
+            bottom: -28,
+            left: "50%",
+            transform: "translateX(-50%)",
+            fontSize: 12,
+            color: "hsl(var(--muted-foreground))",
+            whiteSpace: "nowrap",
+            fontFamily: "Inter, sans-serif",
+            pointerEvents: "none",
+          }}
+        >
+          hover or press a key ↑
+        </motion.p>
+      )}
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
