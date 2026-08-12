@@ -100,9 +100,9 @@ export const projects = [
     description: "A full-featured e-commerce web application with product catalog, shopping cart, user authentication, and secure checkout. Designed with scalability and user experience in mind.",
     tech: ["React", "Express.js", "MongoDB", "Tailwind"],
     github: "https://github.com/Atharva6153-git/E-Commerce",
-    live: null,
+    live: "https://e-commerce-apexgg.vercel.app/",
     highlight: "Commerce",
-    year: "2024",
+    year: "2026",
   },
   {
     id: 3,
@@ -110,9 +110,9 @@ export const projects = [
     description: "An AI-powered medical assistance chatbot that helps users get preliminary health guidance. Integrates advanced language models for accurate, empathetic responses.",
     tech: ["Python", "Flask", "Gemini API", "React"],
     github: "https://github.com/Atharva6153-git/B-Bot-Medguide",
-    live: null,
+    live: "https://b-bot-medguide.onrender.com/",
     highlight: "AI / Health",
-    year: "2024",
+    year: "2026",
   },
   {
     id: 4,
@@ -120,9 +120,9 @@ export const projects = [
     description: "A hackathon-winning platform that helps students discover universities, courses, and scholarships tailored to their profile. Collaborative project built under tight deadlines.",
     tech: ["React", "Node.js", "MongoDB", "Firebase"],
     github: "https://github.com/Shreyas-patil07/UNIFIND",
-    live: null,
+    live: "https://www.teamgambit.tech/home",
     highlight: "Hackathon",
-    year: "2024",
+    year: "2026",
   },
 ];
 
