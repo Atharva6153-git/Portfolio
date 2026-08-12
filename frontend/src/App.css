@@ -208,15 +208,17 @@ html {
    3D Tech Keyboard
    ============================== */
 .tech-keyboard-scene {
-  perspective: 1400px;
-  perspective-origin: 50% 38%;
+  perspective: 1200px;
+  perspective-origin: 50% 30%;
   width: 100%;
-  max-width: 560px;
+  max-width: 580px;
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 48px 70px rgba(0, 0, 0, 0.6));
+  /* Rich ambient shadow underneath the board */
+  filter: drop-shadow(0 60px 80px rgba(0, 0, 0, 0.75))
+          drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
 }
 
 .tech-keyboard-float {
@@ -228,128 +230,96 @@ html {
 }
 
 .tech-keyboard-board {
-  width: 88%;
-  padding: 22px;
-  border-radius: 22px;
+  width: 90%;
+  /* Extra bottom padding to show key side faces */
+  padding: 20px 20px 36px 20px;
+  border-radius: 20px;
   transform-style: preserve-3d;
+
+  /* Heavy dark board — carbon-fibre look */
   background:
-    linear-gradient(145deg, #2a2016 0%, #1a1109 40%, #100a05 100%);
-  border: 1px solid #3a2b1c;
+    repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 5px
+    ),
+    linear-gradient(160deg, #252520 0%, #141410 50%, #0c0c09 100%);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+
+  /* The thick base slab — most important for the "heavy" look */
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.07),
-    inset 0 -8px 24px rgba(0, 0, 0, 0.75),
-    0 36px 70px rgba(0, 0, 0, 0.6),
-    0 12px 0 rgba(0, 0, 0, 0.25);
+    /* Top surface sheen */
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    /* Inner depth shadow */
+    inset 0 -12px 28px rgba(0, 0, 0, 0.7),
+    /* Thick base layers */
+    0 8px  0 #0e0e0b,
+    0 16px 0 #0a0a08,
+    0 20px 0 #070706,
+    /* Ambient ground shadow */
+    0 28px 60px rgba(0, 0, 0, 0.8),
+    0 40px 80px rgba(0, 0, 0, 0.5);
+
   position: relative;
 }
 
+/* Top-left corner highlight */
 .tech-keyboard-board::before {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 22px;
-  background: repeating-linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0.025) 0 2px,
-    transparent 2px 6px
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    transparent 35%
   );
   pointer-events: none;
+  z-index: 0;
 }
 
+/* Board rim — bottom face of the slab */
 .tech-keyboard-board::after {
   content: "";
   position: absolute;
-  inset: -1px;
-  border-radius: 23px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    transparent 40%,
-    transparent 60%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  pointer-events: none;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  padding: 1px;
+  left: 4px;
+  right: 4px;
+  bottom: -22px;
+  height: 22px;
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(180deg, #0a0a08 0%, #050504 100%);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-top: none;
+  z-index: -1;
 }
 
 .light .tech-keyboard-board {
-  background: linear-gradient(145deg, #d9c4a7 0%, #b89773 45%, #8f6e4a 100%);
-  border-color: #a8845c;
+  background:
+    repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.04) 0px,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 5px
+    ),
+    linear-gradient(160deg, #c8b49a 0%, #a07d58 50%, #7a5c3a 100%);
+  border-color: rgba(255, 255, 255, 0.2);
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -8px 24px rgba(0, 0, 0, 0.15),
-    0 36px 70px rgba(0, 0, 0, 0.28),
-    0 12px 0 rgba(0, 0, 0, 0.12);
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -12px 28px rgba(0, 0, 0, 0.2),
+    0 8px  0 #5c3e22,
+    0 16px 0 #4a3019,
+    0 20px 0 #3a2410,
+    0 28px 60px rgba(0, 0, 0, 0.4),
+    0 40px 80px rgba(0, 0, 0, 0.25);
 }
 
-.tech-keyboard-grid {
-  display: grid;
-  gap: 10px;
-  transform-style: preserve-3d;
-  position: relative;
-  z-index: 1;
-}
-
-.tech-key {
-  --key-depth: 12px;
-  --key-bg: #333;
-  --key-glow: rgba(255, 255, 255, 0.15);
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--key-bg);
-  font-weight: 800;
-  font-size: clamp(10px, 1.3vw, 15px);
-  transform-style: preserve-3d;
-  transition:
-    transform 120ms ease-out,
-    filter 120ms ease-out;
-  cursor: default;
-  user-select: none;
-}
-
-.tech-key--empty {
-  opacity: 0.35;
-}
-
-.tech-key-icon {
-  position: relative;
-  z-index: 2;
-  width: 58%;
-  height: 58%;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-.tech-key-icon--dark-bg {
-}
-
-.tech-key-label {
-  position: relative;
-  z-index: 2;
-  letter-spacing: 0.03em;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .tech-key:not(.tech-key--empty) {
-    will-change: transform;
-  }
-
-  .tech-key:not(.tech-key--empty):hover {
-    filter: brightness(1.25);
-    z-index: 5;
-  }
-
-  .tech-key:not(.tech-key--empty):hover .tech-key-icon {
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4)) brightness(1.08);
-  }
+.light .tech-keyboard-board::after {
+  background: linear-gradient(180deg, #5c3e22 0%, #3a2410 100%);
 }
 
 /* ====================================================
@@ -360,14 +330,16 @@ html {
 @media (max-width: 1024px) {
   .tech-keyboard-scene {
     max-width: 480px;
-    /* drop-shadow filter is EXTREMELY expensive on mobile GPUs */
-    filter: none;
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.6));
   }
   .tech-keyboard-board {
-    padding: 16px;
+    padding: 16px 16px 28px 16px;
     box-shadow:
-      inset 0 2px 0 rgba(255,255,255,0.06),
-      0 20px 40px rgba(0,0,0,0.4);
+      inset 0 1px 0 rgba(255,255,255,0.08),
+      inset 0 -8px 20px rgba(0,0,0,0.6),
+      0 6px 0 #0e0e0b,
+      0 12px 0 #070706,
+      0 20px 40px rgba(0,0,0,0.7);
   }
 }
 
@@ -385,33 +357,12 @@ html {
 
   .tech-keyboard-board {
     transform: none !important;
-    padding: 14px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    padding: 14px 14px 14px 14px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
   }
 
-  .tech-keyboard-grid {
-    transform-style: flat;
-    gap: 8px;
-  }
-
-  .tech-key {
-    --key-depth: 4px;
-    transform: none;
-    transform-style: flat;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.14),
-      0 var(--key-depth) 0 color-mix(in srgb, var(--key-bg) 55%, black),
-      0 calc(var(--key-depth) + 2px) 6px rgba(0, 0, 0, 0.3);
-    font-size: 11px;
-  }
-
-  .tech-key::after {
+  .tech-keyboard-board::after {
     display: none;
-  }
-
-  .tech-key-icon {
-    width: 52%;
-    height: 52%;
   }
 
   /* Lighter starfield on phones */

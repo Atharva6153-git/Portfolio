@@ -1,16 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { techStack } from "../mock/mock";
 
 const COLS = 6;
 const ROWS = 4;
 const TOTAL = COLS * ROWS;
 
+// How tall the keycap is in px (the visible side thickness)
+const KEY_DEPTH = 10;
+
 const TechKeyIcon = ({ item }) => {
   const [error, setError] = useState(false);
 
   if (!item?.icon || error) {
-    return <span className="tech-key-label" style={{ color: item?.text ?? "#fff" }}>{item?.short ?? ""}</span>;
+    return (
+      <span
+        style={{
+          color: item?.text ?? "#fff",
+          fontWeight: 800,
+          fontSize: "clamp(9px, 1.1vw, 13px)",
+          letterSpacing: "0.03em",
+          lineHeight: 1,
+          userSelect: "none",
+          textShadow: "0 1px 2px rgba(0,0,0,0.5)",
+        }}
+      >
+        {item?.short ?? ""}
+      </span>
+    );
   }
 
   const src = item.icon?.startsWith("http")
@@ -21,8 +38,15 @@ const TechKeyIcon = ({ item }) => {
     <img
       src={src}
       alt=""
-      className={`tech-key-icon${item.text === "#000" ? " tech-key-icon--dark-bg" : ""}`}
-      style={item.invertIcon ? { filter: "invert(1) brightness(2)" } : undefined}
+      style={{
+        width: "52%",
+        height: "52%",
+        objectFit: "contain",
+        pointerEvents: "none",
+        userSelect: "none",
+        filter: item.invertIcon ? "invert(1) brightness(2)" : undefined,
+        display: "block",
+      }}
       loading="lazy"
       draggable={false}
       onError={() => setError(true)}
@@ -30,79 +54,133 @@ const TechKeyIcon = ({ item }) => {
   );
 };
 
+/**
+ * A single keycap rendered with real CSS 3D faces:
+ *   - top face   (the visible surface with the icon)
+ *   - front face (bottom-facing thick edge visible in isometric view)
+ *   - right face (right-facing thick edge visible in isometric view)
+ *
+ * Hover: key translates DOWN along Y (pressed effect) and the side faces shrink.
+ */
 const TechKey = ({ item, index, isMobile }) => {
   const isEmpty = !item;
-  const style = isEmpty
-    ? { "--key-bg": "#1a1a1e", "--key-glow": "rgba(255,255,255,0.08)" }
-    : {
-        "--key-bg": item.bg,
-        "--key-glow": item.color ? `${item.color}55` : "rgba(255,255,255,0.2)",
-      };
+  const bg = isEmpty ? "#18181b" : item.bg;
+  // Darken bg for side faces
+  const sideBg = isEmpty
+    ? "#0a0a0c"
+    : `color-mix(in srgb, ${bg} 45%, #000)`;
 
-  const keyClass = `tech-key${isEmpty ? " tech-key--empty" : ""}`;
+  const [pressed, setPressed] = useState(false);
+
+  // Auto-press animation — stagger each key sequentially on mount
+  useEffect(() => {
+    if (isMobile || isEmpty) return;
+    const delay = 800 + index * 60;
+    const timer = setTimeout(() => {
+      setPressed(true);
+      setTimeout(() => setPressed(false), 180);
+    }, delay);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile]);
+
+  const pressDepth = pressed ? KEY_DEPTH - 2 : 0;
 
   if (isMobile) {
+    // Simple flat key for mobile — no GPU-heavy transforms
     return (
-      <div className={keyClass} style={style}>
+      <div
+        style={{
+          aspectRatio: "1/1",
+          borderRadius: 7,
+          background: bg,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: isEmpty
+            ? "none"
+            : `0 ${KEY_DEPTH / 2}px 0 ${sideBg}, 0 ${KEY_DEPTH / 2 + 2}px 6px rgba(0,0,0,0.5)`,
+          opacity: isEmpty ? 0.25 : 1,
+        }}
+      >
         {!isEmpty && <TechKeyIcon item={item} />}
       </div>
     );
   }
 
-  // To create true 3D thickness that doesn't clip, we use stacked voxel layers
-  const depth = 16;
-  const layers = Array.from({ length: depth });
-
   return (
-    <motion.div 
-      className={keyClass} 
-      style={{ ...style, transformStyle: "preserve-3d", position: "relative" }} 
+    <div
+      style={{
+        aspectRatio: "1/1",
+        position: "relative",
+        transformStyle: "preserve-3d",
+        cursor: isEmpty ? "default" : "pointer",
+        opacity: isEmpty ? 0.2 : 1,
+      }}
       title={item?.name}
-      whileHover={!isMobile && !isEmpty ? "hover" : undefined}
+      onMouseEnter={() => !isEmpty && setPressed(true)}
+      onMouseLeave={() => !isEmpty && setPressed(false)}
     >
+      {/* === TOP FACE === */}
       <motion.div
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        variants={{ hover: { z: -6, scale: 0.96 } }}
-        transition={{ delay: 0.4 + index * 0.03, duration: 0.5, ease: "easeOut" }}
-        style={{ width: "100%", height: "100%", transformStyle: "preserve-3d", pointerEvents: "none" }}
+        animate={{ y: pressDepth }}
+        transition={{ duration: 0.1, ease: "easeOut" }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 8,
+          background: bg,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transformStyle: "preserve-3d",
+          // Top highlight edge
+          boxShadow: pressed
+            ? `inset 0 -1px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)`
+            : `inset 0 2px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.3)`,
+          zIndex: 3,
+        }}
       >
-        {layers.map((_, d) => (
-          <div
-            key={d}
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: "inherit",
-              background: d === depth - 1 
-                ? "var(--key-bg)" 
-                : "color-mix(in srgb, var(--key-bg) 40%, black)",
-              transform: `translateZ(${d}px)`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: d === 0 ? "0 4px 10px rgba(0,0,0,0.6)" : (d === depth - 1 ? "inset 0 2px 2px rgba(255, 255, 255, 0.2)" : "none"),
-            }}
-          >
-            {d === depth - 1 && !isEmpty && <TechKeyIcon item={item} />}
-          </div>
-        ))}
+        {!isEmpty && <TechKeyIcon item={item} />}
       </motion.div>
-      {/* Invisible static hit area for stable hover and 3D depth sorting */}
-      <div 
-        style={{ 
-          position: 'absolute', 
-          inset: 0, 
-          transform: `translateZ(${depth}px)`, 
-          cursor: isEmpty ? 'default' : 'pointer',
-          background: 'rgba(255, 255, 255, 0.01)'
-        }} 
+
+      {/* === FRONT FACE (bottom edge, the thick side you see from below in isometric) === */}
+      <motion.div
+        animate={{ scaleY: pressed ? 0.15 : 1, y: pressed ? pressDepth : 0 }}
+        transition={{ duration: 0.1, ease: "easeOut" }}
+        style={{
+          position: "absolute",
+          left: 2,
+          right: 2,
+          bottom: -KEY_DEPTH,
+          height: KEY_DEPTH,
+          borderRadius: "0 0 6px 6px",
+          background: sideBg,
+          transformOrigin: "top",
+          zIndex: 1,
+        }}
       />
-    </motion.div>
+
+      {/* === RIGHT FACE (right edge side) === */}
+      <motion.div
+        animate={{ scaleX: pressed ? 0.15 : 1, y: pressed ? pressDepth : 0 }}
+        transition={{ duration: 0.1, ease: "easeOut" }}
+        style={{
+          position: "absolute",
+          top: 2,
+          bottom: -KEY_DEPTH + 2,
+          right: -KEY_DEPTH,
+          width: KEY_DEPTH,
+          borderRadius: "0 6px 6px 0",
+          background: `color-mix(in srgb, ${sideBg} 80%, #111)`,
+          transformOrigin: "left",
+          zIndex: 2,
+        }}
+      />
+    </div>
   );
 };
 
-// 3D isometric keyboard with brand logos. Flat 2D grid on mobile to avoid GPU crashes.
 const TechKeyboard = () => {
   const items = [...techStack];
   while (items.length < TOTAL) items.push(null);
@@ -127,37 +205,43 @@ const TechKeyboard = () => {
 
   const boardInitial = isMobile
     ? { opacity: 0, scale: 0.95 }
-    : { opacity: 0, scale: 0.9, rotateX: 60, rotateZ: -30 }; // Match the exact angle from the photo
+    : { opacity: 0, scale: 0.88, rotateX: 55, rotateZ: -28 };
 
   const boardAnimate = isMobile
     ? { opacity: 1, scale: 1 }
-    : { opacity: 1, scale: 1, rotateX: 60, rotateZ: -30 }; // Deep isometric angle
+    : { opacity: 1, scale: 1, rotateX: 55, rotateZ: -28 };
 
   return (
     <div className="tech-keyboard-scene" aria-hidden="true">
       <motion.div
         className="tech-keyboard-float"
-        animate={isMobile || reducedMotion ? undefined : { y: [0, -10, 0], rotateX: [0, 1, 0], rotateY: [0, -1, 0] }}
+        animate={
+          isMobile || reducedMotion
+            ? undefined
+            : { y: [0, -8, 0] }
+        }
         transition={
           isMobile || reducedMotion
             ? undefined
-            : {
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.4,
-              }
+            : { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.8 }
         }
       >
         <motion.div
           initial={boardInitial}
           animate={boardAnimate}
-          transition={{ duration: isMobile ? 0.5 : 1.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: isMobile ? 0.5 : 1.3, ease: [0.22, 1, 0.36, 1] }}
           className="tech-keyboard-board"
         >
+          {/* Key grid — extra padding to show side faces */}
           <div
-            className="tech-keyboard-grid"
-            style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: `repeat(${COLS}, 1fr)`,
+              gap: isMobile ? 8 : 12,
+              // Bottom/right padding to avoid clipping the side faces
+              paddingBottom: isMobile ? 4 : KEY_DEPTH + 4,
+              paddingRight: isMobile ? 4 : KEY_DEPTH + 4,
+            }}
           >
             {items.slice(0, TOTAL).map((item, i) => (
               <TechKey key={i} item={item} index={i} isMobile={isMobile} />
