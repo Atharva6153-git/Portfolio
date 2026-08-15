@@ -123,6 +123,20 @@ export const projects = [
     }
   },
   {
+    id: 5,
+    title: "Personal Portfolio",
+    description: "A modern developer portfolio built with React, Tailwind CSS, and Framer Motion. Features a 3D interactive tech keyboard, animated sections, dark mode, project modals, hackathon showcase, and a working contact form via EmailJS.",
+    tech: ["React", "Tailwind CSS", "Framer Motion", "EmailJS"],
+    github: "https://github.com/Atharva6153-git/Portfolio",
+    live: "https://portfolio-apexgg.vercel.app/",
+    highlight: "Portfolio",
+    year: "2026",
+    featured: {
+      frontend: ["React", "Tailwind CSS", "Framer Motion", "shadcn/ui", "Lucide Icons"],
+      backend: ["EmailJS", "Python Flask", "Vercel", "CRACO"]
+    }
+  },
+  {
     id: 4,
     title: "UNIFIND",
     description: "A hackathon-winning platform that helps students discover universities, courses, and scholarships tailored to their profile. Collaborative project built under tight deadlines.",
