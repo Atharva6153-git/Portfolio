@@ -73,8 +73,8 @@ const LearningTrack = ({ config, items, index }) => {
 
       {/* Items */}
       <div className="flex flex-col gap-3">
-        {items.map((item, i) => (
-          <div key={i} className="group">
+        {items.map((item) => (
+          <div key={item.name} className="group">
             <div className="flex items-center gap-2 mb-0.5">
               <span
                 className="px-2.5 py-1 rounded-lg text-[11px] font-semibold"

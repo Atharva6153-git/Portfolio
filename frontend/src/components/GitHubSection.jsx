@@ -53,6 +53,7 @@ const RepoCard = ({ repo, index }) => {
       viewport={{ once: true, margin: "-40px" }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
       whileHover={{ y: -4 }}
+      whileFocus={{ y: -4 }}
       className="group flex flex-col gap-3 rounded-2xl border border-[hsl(var(--border))]/50 bg-[hsl(var(--card))] p-5 hover:border-[hsl(var(--border))] transition-all duration-200"
     >
       <div className="flex items-start justify-between gap-2">
@@ -312,7 +313,7 @@ const GitHubSection = () => {
                 {profile.avatar_url && (
                   <img
                     src={profile.avatar_url}
-                    alt={profile.login}
+                    alt={`${profile.login}'s GitHub avatar`}
                     className="w-10 h-10 rounded-full border border-[hsl(var(--border))]"
                   />
                 )}

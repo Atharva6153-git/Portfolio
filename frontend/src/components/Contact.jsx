@@ -7,7 +7,8 @@ import { useToast } from "../hooks/use-toast";
 
 const Contact = () => {
   const formRef = useRef(null);
-  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [status, setStatus] = useState("idle");
+  const [srMsg, setSrMsg] = useState("");
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", phone: "", doubt: "" });
 
@@ -17,10 +18,12 @@ const Contact = () => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.doubt) {
       toast({ title: "Missing fields", description: "Please fill in all fields before sending." });
+      setSrMsg("Please fill in all fields before sending.");
       return;
     }
 
     setStatus("sending");
+    setSrMsg("Sending your message…");
 
     const configured =
       emailjsConfig.serviceId !== "YOUR_SERVICE_ID" &&
@@ -37,9 +40,9 @@ const Contact = () => {
         );
       } else {
         await new Promise((r) => setTimeout(r, 900));
-        console.log("[EmailJS not configured] Simulated send:", form);
       }
       setStatus("success");
+      setSrMsg("Message sent successfully. Thanks!");
       toast({
         title: "Message sent",
         description: configured
@@ -47,12 +50,12 @@ const Contact = () => {
           : "Simulated — add EmailJS keys in .env to deliver real emails.",
       });
       setForm({ name: "", phone: "", doubt: "" });
-      setTimeout(() => setStatus("idle"), 2500);
-    } catch (err) {
-      console.error(err);
+      setTimeout(() => { setStatus("idle"); setSrMsg(""); }, 2500);
+    } catch {
       setStatus("error");
+      setSrMsg("Failed to send. Please try again.");
       toast({ title: "Failed to send", description: "Something went wrong. Try again." });
-      setTimeout(() => setStatus("idle"), 2500);
+      setTimeout(() => { setStatus("idle"); setSrMsg(""); }, 2500);
     }
   };
 
@@ -72,6 +75,9 @@ const Contact = () => {
             <span className="text-[hsl(var(--muted-foreground))]">something together.</span>
           </h2>
         </motion.div>
+
+        {/* Screen-reader live status announcements */}
+        <div role="status" aria-live="polite" className="sr-only">{srMsg}</div>
 
         <div className="grid lg:grid-cols-5 gap-8">
           <motion.div
@@ -151,23 +157,27 @@ const Contact = () => {
           >
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Name</label>
+                <label htmlFor="contact-name" className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Name</label>
                 <input
+                  id="contact-name"
                   name="name"
                   value={form.name}
                   onChange={onChange}
                   type="text"
+                  autoComplete="name"
                   placeholder="Your name"
                   className="mt-2 w-full bg-transparent border-b border-[hsl(var(--border))] py-2 text-sm outline-none focus:border-[hsl(var(--foreground))] transition-colors"
                 />
               </div>
               <div>
-                <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Phone</label>
+                <label htmlFor="contact-phone" className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Phone</label>
                 <input
+                  id="contact-phone"
                   name="phone"
                   value={form.phone}
                   onChange={onChange}
                   type="tel"
+                  autoComplete="tel"
                   placeholder="+91 98765 43210"
                   className="mt-2 w-full bg-transparent border-b border-[hsl(var(--border))] py-2 text-sm outline-none focus:border-[hsl(var(--foreground))] transition-colors"
                 />
@@ -175,8 +185,9 @@ const Contact = () => {
             </div>
 
             <div>
-              <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Message</label>
+              <label htmlFor="contact-message" className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Message</label>
               <textarea
+                id="contact-message"
                 name="doubt"
                 value={form.doubt}
                 onChange={onChange}

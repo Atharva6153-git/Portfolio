@@ -69,4 +69,9 @@ code {
   body {
     @apply bg-background text-foreground;
   }
+  /* Global keyboard focus ring — consistent across all browsers */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
 }

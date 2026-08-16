@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
@@ -17,15 +17,55 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const menuBtnRef = useRef(null);
+  const firstNavRef = useRef(null);
 
+  // Throttled scroll — runs at most once per animation frame
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Escape closes menu and restores focus to trigger button
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        menuBtnRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // Move focus to first nav item when menu opens
+  useEffect(() => {
+    if (open) {
+      const t = setTimeout(() => firstNavRef.current?.focus(), 60);
+      return () => clearTimeout(t);
+    }
+  }, [open]);
+
+  // Lock body scroll while menu is open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   const handleNav = (href) => {
     setOpen(false);
+    menuBtnRef.current?.focus();
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -42,38 +82,25 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10 py-5">
           <button
             onClick={() => handleNav("#home")}
-            className="text-sm font-semibold tracking-tight text-[hsl(var(--foreground))] hover:opacity-80 transition-opacity"
+            className="text-sm font-semibold tracking-tight text-[hsl(var(--foreground))] hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] rounded"
           >
             Atharva Jadhav
           </button>
 
           <div className="flex items-center gap-2">
+            {/* 44×44 touch target */}
             <button
               onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="relative w-9 h-9 rounded-full flex items-center justify-center border border-[hsl(var(--border))] hover:border-[hsl(var(--foreground))]/40 transition-colors"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              className="relative w-11 h-11 rounded-full flex items-center justify-center border border-[hsl(var(--border))] hover:border-[hsl(var(--foreground))]/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {theme === "dark" ? (
-                  <motion.span
-                    key="moon"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="absolute"
-                  >
+                  <motion.span key="moon" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.25 }} className="absolute" aria-hidden="true">
                     <Moon className="w-4 h-4" />
                   </motion.span>
                 ) : (
-                  <motion.span
-                    key="sun"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="absolute"
-                  >
+                  <motion.span key="sun" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.25 }} className="absolute" aria-hidden="true">
                     <Sun className="w-4 h-4" />
                   </motion.span>
                 )}
@@ -81,12 +108,15 @@ const Navbar = () => {
             </button>
 
             <button
+              ref={menuBtnRef}
               onClick={() => setOpen((v) => !v)}
-              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-[hsl(var(--muted))] transition-colors"
-              aria-label="Menu"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-nav"
+              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-[hsl(var(--muted))] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
             >
-              <span className="text-sm lowercase">menu</span>
-              {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              <span className="text-sm lowercase" aria-hidden="true">menu</span>
+              {open ? <X className="w-4 h-4" aria-hidden="true" /> : <Menu className="w-4 h-4" aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -101,15 +131,16 @@ const Navbar = () => {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 bg-[hsl(var(--background))]/95 backdrop-blur-md md:backdrop-blur-xl flex items-center justify-center"
           >
-            <nav className="flex flex-col items-center gap-6">
+            <nav id="mobile-nav" aria-label="Main navigation" className="flex flex-col items-center gap-6">
               {navLinks.map((link, idx) => (
                 <motion.button
                   key={link.href}
+                  ref={idx === 0 ? firstNavRef : undefined}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: idx * 0.06, duration: 0.35 }}
                   onClick={() => handleNav(link.href)}
-                  className="text-4xl md:text-6xl font-bold tracking-tight text-[hsl(var(--foreground))] hover:text-[hsl(var(--foreground))]/60 transition-colors"
+                  className="text-4xl md:text-6xl font-bold tracking-tight text-[hsl(var(--foreground))] hover:text-[hsl(var(--foreground))]/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] rounded px-2"
                 >
                   {link.label}
                 </motion.button>

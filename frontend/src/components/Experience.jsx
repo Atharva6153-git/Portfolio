@@ -57,7 +57,7 @@ const TimelineEntry = ({ event, index, isLast }) => {
           className="relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
           style={{ background: t.dotBg, border: `2px solid ${t.dotBorder}` }}
         >
-          <Icon className="w-4 h-4" style={{ color: t.dot }} />
+          <Icon className="w-4 h-4" style={{ color: t.dot }} aria-hidden="true" />
         </div>
         {/* Vertical line to next */}
         {!isLast && (
@@ -78,7 +78,7 @@ const TimelineEntry = ({ event, index, isLast }) => {
             {/* Top row: badges + year */}
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${t.badge}`}>
-                <Icon className="w-3 h-3" />
+                <Icon className="w-3 h-3" aria-hidden="true" />
                 {event.result}
               </span>
               <span className="px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-wider bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]/30">
@@ -119,9 +119,11 @@ const TimelineEntry = ({ event, index, isLast }) => {
             {(event.tech.length > 0 || event.links.length > 0) && (
               <button
                 onClick={() => setExpanded(v => !v)}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+                aria-expanded={expanded}
+                aria-controls={`timeline-detail-${event.id}`}
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] rounded"
               >
-                {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                {expanded ? <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" /> : <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />}
                 {expanded ? "Show less" : "Tech & links"}
               </button>
             )}
@@ -131,6 +133,7 @@ const TimelineEntry = ({ event, index, isLast }) => {
           <AnimatePresence initial={false}>
             {expanded && (
               <motion.div
+                id={`timeline-detail-${event.id}`}
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
