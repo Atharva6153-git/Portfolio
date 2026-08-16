@@ -1,13 +1,97 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Code2, Sparkles, Rocket } from "lucide-react";
-import { personalInfo } from "../mock/mock";
+import { Code2, Sparkles, Rocket, BookOpen, TrendingUp, Crosshair } from "lucide-react";
+import { personalInfo, currentlyLearning } from "../mock/mock";
 
 const stats = [
-  { icon: Code2, label: "Full Stack", value: "End-to-end apps" },
-  { icon: Sparkles, label: "AI Integrated", value: "Groq & Gemini" },
-  { icon: Rocket, label: "Cloud Ready", value: "Docker & Kafka" },
+  { icon: Code2,     label: "Full Stack",   value: "End-to-end apps" },
+  { icon: Sparkles,  label: "AI Integrated", value: "Groq & Gemini" },
+  { icon: Rocket,    label: "Cloud Ready",  value: "Docker & Kafka" },
 ];
+
+const TRACK_CONFIG = [
+  {
+    key: "learning",
+    label: "Currently Learning",
+    Icon: BookOpen,
+    accent: "#6366f1",
+    dotBg: "rgba(99,102,241,0.12)",
+    dotBorder: "rgba(99,102,241,0.35)",
+    chipBg: "rgba(99,102,241,0.1)",
+    chipBorder: "rgba(99,102,241,0.3)",
+    chipText: "#a5b4fc",
+  },
+  {
+    key: "improving",
+    label: "Improving",
+    Icon: TrendingUp,
+    accent: "#10b981",
+    dotBg: "rgba(16,185,129,0.12)",
+    dotBorder: "rgba(16,185,129,0.35)",
+    chipBg: "rgba(16,185,129,0.1)",
+    chipBorder: "rgba(16,185,129,0.3)",
+    chipText: "#6ee7b7",
+  },
+  {
+    key: "next",
+    label: "Next Goal",
+    Icon: Crosshair,
+    accent: "#f59e0b",
+    dotBg: "rgba(245,158,11,0.12)",
+    dotBorder: "rgba(245,158,11,0.35)",
+    chipBg: "rgba(245,158,11,0.1)",
+    chipBorder: "rgba(245,158,11,0.3)",
+    chipText: "#fcd34d",
+  },
+];
+
+const LearningTrack = ({ config, items, index }) => {
+  const { label, Icon, accent, dotBg, dotBorder, chipBg, chipBorder, chipText } = config;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 0.45 }}
+      className="rounded-2xl border border-[hsl(var(--border))]/50 bg-[hsl(var(--card))] p-5"
+    >
+      {/* Track header */}
+      <div className="flex items-center gap-2.5 mb-4">
+        <div
+          className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+          style={{ background: dotBg, border: `1px solid ${dotBorder}` }}
+        >
+          <Icon className="w-3.5 h-3.5" style={{ color: accent }} />
+        </div>
+        <span
+          className="text-xs font-bold uppercase tracking-[0.12em]"
+          style={{ color: accent }}
+        >
+          {label}
+        </span>
+      </div>
+
+      {/* Items */}
+      <div className="flex flex-col gap-3">
+        {items.map((item, i) => (
+          <div key={i} className="group">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span
+                className="px-2.5 py-1 rounded-lg text-[11px] font-semibold"
+                style={{ background: chipBg, border: `1px solid ${chipBorder}`, color: chipText }}
+              >
+                {item.name}
+              </span>
+            </div>
+            <p className="text-[11px] text-[hsl(var(--muted-foreground))] leading-relaxed pl-0.5">
+              {item.note}
+            </p>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
 
 const About = () => {
   return (
@@ -89,6 +173,34 @@ const About = () => {
             </div>
           </motion.div>
         </div>
+        {/* Currently Learning */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-16"
+        >
+          {/* Sub-header */}
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-xs uppercase tracking-[0.18em] font-bold text-[hsl(var(--muted-foreground))]">
+              Currently Learning
+            </span>
+            <span className="flex-1 h-px bg-[hsl(var(--border))]/50" />
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4">
+            {TRACK_CONFIG.map((config, i) => (
+              <LearningTrack
+                key={config.key}
+                config={config}
+                items={currentlyLearning[config.key]}
+                index={i}
+              />
+            ))}
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );

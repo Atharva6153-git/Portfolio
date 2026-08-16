@@ -680,3 +680,22 @@ export const emailjsConfig = {
   templateId: process.env.REACT_APP_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID",
   publicKey: process.env.REACT_APP_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY",
 };
+
+// Currently Learning data — derived only from existing project/resume context
+export const currentlyLearning = {
+  learning: [
+    { name: "Solidity & Web3", note: "Smart contracts & on-chain interactions — used in ZenoGuard, going deeper" },
+    { name: "System Design", note: "Scalable architecture patterns — distributed systems, CAP theorem, rate limiting" },
+    { name: "Advanced FastAPI", note: "Async patterns, background tasks, dependency injection depth" },
+  ],
+  improving: [
+    { name: "Apache Kafka", note: "Used in stack but building deeper hands-on experience with event-driven systems" },
+    { name: "Docker", note: "Listed in skills — now containerising projects end-to-end" },
+    { name: "PostgreSQL", note: "Used in ZenoGuard and E-ShopX — deepening query optimisation and indexing knowledge" },
+  ],
+  next: [
+    { name: "TypeScript", note: "Natural next step for React + Node work — adding type safety to existing projects" },
+    { name: "Redis", note: "Caching and session management — complements existing backend stack" },
+    { name: "AWS (EC2 / S3 / Lambda)", note: "Participated in AWS Bharat Hackathon — moving from awareness to deployment" },
+  ],
+};
