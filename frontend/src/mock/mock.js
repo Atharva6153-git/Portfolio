@@ -93,6 +93,56 @@ export const projects = [
       frontend: ["React", "Vite", "Tailwind CSS", "Axios"],
       backend: ["FastAPI", "SQLAlchemy", "JWT", "Pydantic", "YOLO DL Detection", "Tesseract OCR"]
     },
+    architecture: {
+      layers: [
+        {
+          id: "client",
+          label: "Client",
+          color: "#3b82f6",
+          nodes: [
+            { id: "react", name: "React + Vite", desc: "SPA — policy dashboard, KYC upload, claim submission UI" },
+            { id: "tailwind", name: "Tailwind CSS", desc: "Utility-first styling for responsive layouts" },
+            { id: "axios", name: "Axios", desc: "HTTP client — sends form data and polls claim status" }
+          ]
+        },
+        {
+          id: "api",
+          label: "API Layer",
+          color: "#8b5cf6",
+          nodes: [
+            { id: "fastapi", name: "FastAPI", desc: "REST API — handles auth, policy pricing, claim intake" },
+            { id: "pydantic", name: "Pydantic", desc: "Request/response schema validation" },
+            { id: "jwt", name: "JWT Auth", desc: "Stateless token-based authentication for all routes" },
+            { id: "sqlalchemy", name: "SQLAlchemy ORM", desc: "Database abstraction layer over PostgreSQL" }
+          ]
+        },
+        {
+          id: "database",
+          label: "Database",
+          color: "#10b981",
+          nodes: [
+            { id: "postgres", name: "PostgreSQL", desc: "Persistent store for users, policies, and claim records" }
+          ]
+        },
+        {
+          id: "external",
+          label: "External Services",
+          color: "#f59e0b",
+          nodes: [
+            { id: "yolo", name: "YOLO Model", desc: "Deep learning model for visual claim damage detection" },
+            { id: "tesseract", name: "Tesseract OCR", desc: "Extracts text from uploaded KYC identity documents" },
+            { id: "razorpay", name: "Razorpay", desc: "Handles premium payments and payout disbursements" },
+            { id: "web3", name: "Web3.py + Solidity", desc: "Smart contracts enforce policy terms and on-chain payouts" },
+            { id: "cloudinary", name: "Cloudinary", desc: "Cloud storage and CDN for claim document images" }
+          ]
+        }
+      ],
+      flows: [
+        { from: "client", to: "api", label: "HTTPS REST" },
+        { from: "api", to: "database", label: "SQL via ORM" },
+        { from: "api", to: "external", label: "ML inference / payments / blockchain" }
+      ]
+    },
     caseStudy: {
       overview: "ZenoGuard is an AI-powered micro-insurance platform built for gig economy workers who lack access to traditional insurance. The platform delivers personalized, risk-based insurance policies with automated KYC, claim verification via computer vision, and blockchain-enforced payouts.",
       problem: "Gig workers — delivery drivers, freelancers, and daily wage earners — are excluded from conventional insurance due to irregular income and lack of formal employment records. Claim fraud and manual verification delays make existing solutions economically unviable for this segment.",
@@ -137,6 +187,52 @@ export const projects = [
       frontend: ["React", "Tailwind CSS", "Axios"],
       backend: ["Express.js", "MongoDB", "JWT", "Stripe"]
     },
+    architecture: {
+      layers: [
+        {
+          id: "client",
+          label: "Client",
+          color: "#3b82f6",
+          nodes: [
+            { id: "react", name: "React", desc: "SPA — product catalog, cart, auth, checkout pages" },
+            { id: "context", name: "React Context", desc: "Global cart state — persisted to localStorage" },
+            { id: "tailwind", name: "Tailwind CSS", desc: "Responsive utility-first UI" },
+            { id: "axios", name: "Axios", desc: "API calls to Express backend" }
+          ]
+        },
+        {
+          id: "api",
+          label: "API Layer",
+          color: "#8b5cf6",
+          nodes: [
+            { id: "express", name: "Express.js", desc: "REST API — product, auth, cart, order routes" },
+            { id: "jwt", name: "JWT Middleware", desc: "Protects checkout and order routes" },
+            { id: "mongoose", name: "Mongoose ODM", desc: "MongoDB schema definition and query layer" }
+          ]
+        },
+        {
+          id: "database",
+          label: "Database",
+          color: "#10b981",
+          nodes: [
+            { id: "mongo", name: "MongoDB", desc: "Document store — users, products, and orders" }
+          ]
+        },
+        {
+          id: "external",
+          label: "External Services",
+          color: "#f59e0b",
+          nodes: [
+            { id: "stripe", name: "Stripe", desc: "Secure payment processing at checkout" }
+          ]
+        }
+      ],
+      flows: [
+        { from: "client", to: "api", label: "HTTPS REST" },
+        { from: "api", to: "database", label: "Mongoose queries" },
+        { from: "api", to: "external", label: "Stripe API calls" }
+      ]
+    },
     caseStudy: {
       overview: "A full-stack e-commerce web application with a product catalog, shopping cart, user authentication, and secure checkout — built to practice and demonstrate end-to-end MERN stack development.",
       problem: "Learning e-commerce architecture requires handling state management across many moving parts: cart persistence, auth flows, protected routes, and payment integration. Most tutorials stop short of a production-grade implementation.",
@@ -176,6 +272,51 @@ export const projects = [
       frontend: ["React", "Tailwind CSS", "Axios"],
       backend: ["Flask", "Python", "Gemini API", "SQLAlchemy"]
     },
+    architecture: {
+      layers: [
+        {
+          id: "client",
+          label: "Client",
+          color: "#3b82f6",
+          nodes: [
+            { id: "react", name: "React", desc: "Chat UI — message history, input, loading state" },
+            { id: "tailwind", name: "Tailwind CSS", desc: "Responsive chat interface styling" },
+            { id: "axios", name: "Axios", desc: "Posts user messages to Flask API" }
+          ]
+        },
+        {
+          id: "api",
+          label: "API Layer",
+          color: "#8b5cf6",
+          nodes: [
+            { id: "flask", name: "Flask", desc: "Receives user query, builds prompt, calls Gemini, returns response" },
+            { id: "sqlalchemy", name: "SQLAlchemy", desc: "Persists conversation history to database" },
+            { id: "cors", name: "Flask-CORS", desc: "Allows cross-origin requests from React frontend" }
+          ]
+        },
+        {
+          id: "database",
+          label: "Database",
+          color: "#10b981",
+          nodes: [
+            { id: "db", name: "SQLite / PostgreSQL", desc: "Stores conversation sessions and message history" }
+          ]
+        },
+        {
+          id: "external",
+          label: "External Services",
+          color: "#f59e0b",
+          nodes: [
+            { id: "gemini", name: "Google Gemini API", desc: "LLM — generates health-scoped responses via engineered system prompt" }
+          ]
+        }
+      ],
+      flows: [
+        { from: "client", to: "api", label: "HTTPS POST /chat" },
+        { from: "api", to: "database", label: "Save conversation" },
+        { from: "api", to: "external", label: "Gemini API call" }
+      ]
+    },
     caseStudy: {
       overview: "B-Bot MedGuide is an AI-powered health chatbot that provides users with preliminary medical guidance using Google Gemini's language model. The goal was to make basic health information more accessible through a conversational interface.",
       problem: "People often search for medical information across multiple unreliable sources. A conversational interface grounded in a capable LLM can provide clearer, contextual responses while clearly communicating that it is not a substitute for professional medical advice.",
@@ -214,6 +355,45 @@ export const projects = [
     featured: {
       frontend: ["React", "Tailwind CSS", "Framer Motion", "shadcn/ui", "Lucide Icons"],
       backend: ["EmailJS", "Python Flask", "Vercel", "CRACO"]
+    },
+    architecture: {
+      layers: [
+        {
+          id: "client",
+          label: "Client",
+          color: "#3b82f6",
+          nodes: [
+            { id: "react", name: "React", desc: "Single-page app — all sections rendered as components" },
+            { id: "framer", name: "Framer Motion", desc: "Scroll-triggered animations and modal transitions" },
+            { id: "tailwind", name: "Tailwind CSS", desc: "Utility-first styling with CSS custom property theming" },
+            { id: "shadcn", name: "shadcn/ui", desc: "Accessible Radix-based component primitives" }
+          ]
+        },
+        {
+          id: "api",
+          label: "Build / Config",
+          color: "#8b5cf6",
+          nodes: [
+            { id: "craco", name: "CRACO", desc: "Create React App config override — custom webpack plugins" },
+            { id: "router", name: "React Router", desc: "Client-side routing — single / route for the portfolio" }
+          ]
+        },
+        {
+          id: "external",
+          label: "External Services",
+          color: "#f59e0b",
+          nodes: [
+            { id: "emailjs", name: "EmailJS", desc: "Sends contact form submissions directly from the browser — no backend" },
+            { id: "vercel", name: "Vercel", desc: "CI/CD — auto-deploys on every push to main" },
+            { id: "flask", name: "Python Flask (backend/)", desc: "Lightweight API server included in the repo" }
+          ]
+        }
+      ],
+      flows: [
+        { from: "client", to: "api", label: "CRACO bundles React app" },
+        { from: "client", to: "external", label: "EmailJS direct from browser" },
+        { from: "api", to: "external", label: "Deployed via Vercel" }
+      ]
     },
     caseStudy: {
       overview: "A personal developer portfolio designed to present projects, technical skills, and hackathon achievements in a clean, animated interface. Built from scratch with React and deployed on Vercel.",
@@ -255,6 +435,51 @@ export const projects = [
     featured: {
       frontend: ["React", "Tailwind CSS", "Firebase"],
       backend: ["Node.js", "Express.js", "MongoDB", "JWT"]
+    },
+    architecture: {
+      layers: [
+        {
+          id: "client",
+          label: "Client",
+          color: "#3b82f6",
+          nodes: [
+            { id: "react", name: "React", desc: "SPA — student profile form, discovery results, scholarship listings" },
+            { id: "tailwind", name: "Tailwind CSS", desc: "Responsive layout and component styling" },
+            { id: "firebase_auth", name: "Firebase SDK", desc: "Client-side authentication with Firebase" }
+          ]
+        },
+        {
+          id: "api",
+          label: "API Layer",
+          color: "#8b5cf6",
+          nodes: [
+            { id: "express", name: "Express.js", desc: "REST API — profile-based filtering of universities and scholarships" },
+            { id: "jwt", name: "JWT Middleware", desc: "Secures user-specific routes" },
+            { id: "mongoose", name: "Mongoose ODM", desc: "Schema and query layer over MongoDB" }
+          ]
+        },
+        {
+          id: "database",
+          label: "Database",
+          color: "#10b981",
+          nodes: [
+            { id: "mongo", name: "MongoDB", desc: "Stores universities, scholarships, and user profile data" }
+          ]
+        },
+        {
+          id: "external",
+          label: "External Services",
+          color: "#f59e0b",
+          nodes: [
+            { id: "firebase", name: "Firebase Auth", desc: "Manages user sign-up, login, and session tokens" }
+          ]
+        }
+      ],
+      flows: [
+        { from: "client", to: "api", label: "HTTPS REST" },
+        { from: "api", to: "database", label: "Mongoose queries" },
+        { from: "client", to: "external", label: "Firebase Auth SDK" }
+      ]
     },
     caseStudy: {
       overview: "UNIFIND is a student-focused discovery platform that helps users find universities, courses, and scholarships matched to their academic profile. Built as a collaborative hackathon project by Team Gambit.",

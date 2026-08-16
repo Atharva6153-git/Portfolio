@@ -1,7 +1,175 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, X, BookOpen, ChevronRight } from "lucide-react";
+import { Github, ExternalLink, X, BookOpen, ChevronRight, ArrowDown, Info } from "lucide-react";
 import { projects } from "../mock/mock";
+
+// ─── Architecture Diagram ────────────────────────────────────────────────────
+
+const NODE_COLORS = {
+  client:   { bg: "rgba(59,130,246,0.1)",  border: "rgba(59,130,246,0.35)",  text: "#93c5fd", dot: "#3b82f6"  },
+  api:      { bg: "rgba(139,92,246,0.1)",  border: "rgba(139,92,246,0.35)",  text: "#c4b5fd", dot: "#8b5cf6"  },
+  database: { bg: "rgba(16,185,129,0.1)",  border: "rgba(16,185,129,0.35)",  text: "#6ee7b7", dot: "#10b981"  },
+  external: { bg: "rgba(245,158,11,0.1)",  border: "rgba(245,158,11,0.35)",  text: "#fcd34d", dot: "#f59e0b"  },
+};
+
+const ArchNode = ({ node, layerId }) => {
+  const [hovered, setHovered] = useState(false);
+  const c = NODE_COLORS[layerId] ?? NODE_COLORS.client;
+
+  return (
+    <div className="relative" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <motion.div
+        whileHover={{ scale: 1.04, y: -1 }}
+        transition={{ duration: 0.15 }}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium cursor-default select-none"
+        style={{ background: c.bg, border: `1px solid ${c.border}`, color: c.text }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: c.dot }} />
+        {node.name}
+        <Info className="w-3 h-3 opacity-40 flex-shrink-0" />
+      </motion.div>
+
+      {/* Tooltip */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.97 }}
+            transition={{ duration: 0.12 }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-20 w-52 px-3 py-2 rounded-lg text-[11px] leading-relaxed pointer-events-none"
+            style={{
+              background: "hsl(var(--card))",
+              border: `1px solid ${c.border}`,
+              color: "hsl(var(--foreground) / 0.8)",
+              boxShadow: `0 8px 24px rgba(0,0,0,0.3), 0 0 0 1px ${c.border}`
+            }}
+          >
+            {node.desc}
+            {/* Arrow */}
+            <span
+              className="absolute top-full left-1/2 -translate-x-1/2 block w-2 h-2 rotate-45 -mt-1"
+              style={{ background: "hsl(var(--card))", borderRight: `1px solid ${c.border}`, borderBottom: `1px solid ${c.border}` }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const FlowArrow = ({ flow, layers }) => {
+  const fromLayer = layers.find(l => l.id === flow.from);
+  const toLayer   = layers.find(l => l.id === flow.to);
+  if (!fromLayer || !toLayer) return null;
+
+  // For external flows that skip a layer (client → external), show dashed
+  const fromIdx = layers.indexOf(fromLayer);
+  const toIdx   = layers.indexOf(toLayer);
+  const dashed  = Math.abs(toIdx - fromIdx) > 1;
+
+  return (
+    <div className="flex flex-col items-center gap-1 py-1">
+      <div className="flex items-center gap-2">
+        <div
+          className="h-px flex-shrink-0"
+          style={{
+            width: 32,
+            background: dashed
+              ? "repeating-linear-gradient(90deg, hsl(var(--muted-foreground)/0.3) 0 4px, transparent 4px 8px)"
+              : "hsl(var(--muted-foreground)/0.25)"
+          }}
+        />
+        <span className="text-[9px] uppercase tracking-widest text-[hsl(var(--muted-foreground))] whitespace-nowrap opacity-70 font-medium">
+          {flow.label}
+        </span>
+        <div
+          className="h-px flex-shrink-0"
+          style={{
+            width: 32,
+            background: dashed
+              ? "repeating-linear-gradient(90deg, hsl(var(--muted-foreground)/0.3) 0 4px, transparent 4px 8px)"
+              : "hsl(var(--muted-foreground)/0.25)"
+          }}
+        />
+      </div>
+      <ArrowDown className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))] opacity-40" />
+    </div>
+  );
+};
+
+const ArchitectureDiagram = ({ architecture }) => {
+  const { layers, flows } = architecture;
+
+  // Build a sorted flow list matching layer order top→bottom
+  const orderedFlows = flows.slice().sort((a, b) => {
+    const ai = layers.findIndex(l => l.id === a.from);
+    const bi = layers.findIndex(l => l.id === b.from);
+    return ai - bi;
+  });
+
+  return (
+    <div className="rounded-xl border border-[hsl(var(--border))]/40 bg-[hsl(var(--background))]/60 p-5 overflow-x-auto">
+      {/* Legend */}
+      <div className="flex flex-wrap gap-3 mb-5 pb-4 border-b border-[hsl(var(--border))]/30">
+        {layers.map(layer => {
+          const c = NODE_COLORS[layer.id] ?? NODE_COLORS.client;
+          return (
+            <div key={layer.id} className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider" style={{ color: c.text }}>
+              <span className="w-2 h-2 rounded-sm" style={{ background: c.dot, opacity: 0.8 }} />
+              {layer.label}
+            </div>
+          );
+        })}
+        <div className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))] opacity-50 italic self-center">hover nodes for details</div>
+      </div>
+
+      {/* Layer rows */}
+      <div className="flex flex-col items-center gap-0 min-w-[300px]">
+        {layers.map((layer, li) => {
+          // Find if there's a flow FROM this layer to the next (for the arrow)
+          const flowAfter = orderedFlows.find(f => f.from === layer.id);
+
+          return (
+            <React.Fragment key={layer.id}>
+              {/* Layer row */}
+              <motion.div
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: li * 0.08, duration: 0.35 }}
+                className="w-full rounded-xl p-4"
+                style={{
+                  background: NODE_COLORS[layer.id]?.bg ?? "rgba(255,255,255,0.04)",
+                  border: `1px solid ${NODE_COLORS[layer.id]?.border ?? "rgba(255,255,255,0.1)"}`,
+                }}
+              >
+                <p className="text-[9px] uppercase tracking-[0.15em] font-bold mb-3 opacity-60"
+                   style={{ color: NODE_COLORS[layer.id]?.dot }}>
+                  {layer.label}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {layer.nodes.map(node => (
+                    <ArchNode key={node.id} node={node} layerId={layer.id} />
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Arrow between this layer and the next */}
+              {li < layers.length - 1 && flowAfter && (
+                <FlowArrow flow={flowAfter} layers={layers} />
+              )}
+              {li < layers.length - 1 && !flowAfter && (
+                <div className="py-2">
+                  <ArrowDown className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))] opacity-20" />
+                </div>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 // ─── Project Card ────────────────────────────────────────────────────────────
 
@@ -18,46 +186,28 @@ const ProjectCard = ({ project, index, onClick, onCaseStudy }) => {
     >
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[hsl(var(--foreground))]/5 group-hover:to-[hsl(var(--foreground))]/10 transition-all pointer-events-none" />
-
-      {/* Accent glow */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[hsl(var(--foreground))]/8 to-transparent rounded-full blur-2xl group-hover:from-[hsl(var(--foreground))]/15 transition-all" />
 
       <div className="relative p-6 md:p-8 flex flex-col h-full">
-        {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <span className="inline-block px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-bold border border-[hsl(var(--border))]/50 text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))]/40">
             {project.highlight}
           </span>
         </div>
-
-        {/* Title */}
         <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-2 group-hover:text-[hsl(var(--foreground))] transition-colors">
           {project.title}
         </h3>
-
-        {/* Description - truncated */}
         <p className="text-sm text-[hsl(var(--muted-foreground))] line-clamp-2 mb-4 flex-grow">
           {project.description}
         </p>
-
-        {/* Tech tags */}
         <div className="flex flex-wrap gap-1.5 mb-4">
           {project.tech.slice(0, 3).map((t) => (
-            <span
-              key={t}
-              className="px-2 py-0.5 rounded text-[10px] font-medium bg-[hsl(var(--muted))]/60 text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]/30"
-            >
-              {t}
-            </span>
+            <span key={t} className="px-2 py-0.5 rounded text-[10px] font-medium bg-[hsl(var(--muted))]/60 text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]/30">{t}</span>
           ))}
           {project.tech.length > 3 && (
-            <span className="px-2 py-0.5 rounded text-[10px] font-medium text-[hsl(var(--muted-foreground))]">
-              +{project.tech.length - 3}
-            </span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-medium text-[hsl(var(--muted-foreground))]">+{project.tech.length - 3}</span>
           )}
         </div>
-
-        {/* Footer */}
         <div className="flex items-center justify-between gap-2 pt-4 border-t border-[hsl(var(--border))]/20">
           <span className="text-xs text-[hsl(var(--muted-foreground))]">{project.year}</span>
           <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
@@ -84,38 +234,22 @@ const ProjectCard = ({ project, index, onClick, onCaseStudy }) => {
   );
 };
 
-// ─── Project Details Modal (existing, unchanged) ─────────────────────────────
+// ─── Project Details Modal (unchanged) ───────────────────────────────────────
 
 const ProjectModal = ({ project, isOpen, onClose }) => {
   if (!project) return null;
-
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-        >
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: "spring", duration: 0.3 }}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          onClick={onClose} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }} transition={{ type: "spring", duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-8"
-          >
-            {/* Close */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 p-2 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
-            >
+            className="relative w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-8">
+            <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors">
               <X className="w-5 h-5" />
             </button>
-
-            {/* Header */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <span className="px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))]/40">
@@ -125,12 +259,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{project.title}</h2>
               <p className="text-[hsl(var(--muted-foreground))]">{project.year}</p>
             </div>
-
-            <p className="text-base leading-relaxed text-[hsl(var(--foreground))]/90 mb-8">
-              {project.description}
-            </p>
-
-            {/* Tech Stack — two columns */}
+            <p className="text-base leading-relaxed text-[hsl(var(--foreground))]/90 mb-8">{project.description}</p>
             {project.featured && (
               <div className="mb-8 grid md:grid-cols-2 gap-8">
                 <div>
@@ -151,7 +280,6 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                 </div>
               </div>
             )}
-
             {!project.featured && (
               <div className="mb-8">
                 <h3 className="text-sm font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))] mb-3">Tech Stack</h3>
@@ -162,8 +290,6 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                 </div>
               </div>
             )}
-
-            {/* Action buttons */}
             <div className="flex gap-3 pt-6 border-t border-[hsl(var(--border))]">
               <a href={project.github} target="_blank" rel="noopener noreferrer"
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[hsl(var(--foreground))]/10 hover:bg-[hsl(var(--foreground))]/20 text-[hsl(var(--foreground))] font-medium transition-colors">
@@ -202,13 +328,9 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-        >
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -230,10 +352,8 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
               </button>
             </div>
 
-            {/* Body */}
             <div className="px-8 py-8">
-
-              {/* Title block */}
+              {/* Title */}
               <div className="mb-10">
                 <span className="inline-block px-3 py-1 rounded-full text-[10px] uppercase tracking-wider font-bold border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))]/40 mb-4">
                   {project.highlight}
@@ -242,33 +362,35 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
                 <p className="text-[hsl(var(--muted-foreground))] text-sm">{project.year}</p>
               </div>
 
-              {/* Overview */}
               <Section label="Overview">
                 <p className="text-[hsl(var(--foreground))]/85 leading-relaxed">{cs.overview}</p>
               </Section>
 
-              {/* Problem */}
               <Section label="Problem Statement">
                 <div className="pl-4 border-l-2 border-red-500/40">
                   <p className="text-[hsl(var(--foreground))]/85 leading-relaxed">{cs.problem}</p>
                 </div>
               </Section>
 
-              {/* Solution */}
               <Section label="Solution">
                 <div className="pl-4 border-l-2 border-green-500/40">
                   <p className="text-[hsl(var(--foreground))]/85 leading-relaxed">{cs.solution}</p>
                 </div>
               </Section>
 
-              {/* Contribution */}
               <Section label="My Contribution">
                 <div className="rounded-xl bg-[hsl(var(--muted))]/30 border border-[hsl(var(--border))]/40 p-5">
                   <p className="text-[hsl(var(--foreground))]/85 leading-relaxed">{cs.contribution}</p>
                 </div>
               </Section>
 
-              {/* Key Features */}
+              {/* Architecture Diagram — shown only if data present */}
+              {project.architecture && (
+                <Section label="Architecture">
+                  <ArchitectureDiagram architecture={project.architecture} />
+                </Section>
+              )}
+
               <Section label="Key Features">
                 <ul className="grid sm:grid-cols-2 gap-2">
                   {cs.keyFeatures.map((f, i) => (
@@ -280,7 +402,6 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
                 </ul>
               </Section>
 
-              {/* Tech Stack */}
               <Section label="Tech Stack">
                 {project.featured ? (
                   <div className="grid sm:grid-cols-2 gap-6">
@@ -310,7 +431,6 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
                 )}
               </Section>
 
-              {/* Challenges */}
               <Section label="Challenges & Solutions">
                 <div className="flex flex-col gap-4">
                   {cs.challenges.map((item, i) => (
@@ -328,14 +448,12 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
                 </div>
               </Section>
 
-              {/* Outcome */}
               <Section label="Outcome">
                 <div className="rounded-xl bg-[hsl(var(--foreground))]/4 border border-[hsl(var(--border))]/40 p-5">
                   <p className="text-[hsl(var(--foreground))]/85 leading-relaxed">{cs.outcome}</p>
                 </div>
               </Section>
 
-              {/* Action buttons */}
               <div className="flex gap-3 pt-6 border-t border-[hsl(var(--border))]">
                 <a href={project.github} target="_blank" rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[hsl(var(--foreground))]/10 hover:bg-[hsl(var(--foreground))]/20 text-[hsl(var(--foreground))] font-medium transition-colors">
@@ -348,7 +466,6 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
                   </a>
                 )}
               </div>
-
             </div>
           </motion.div>
         </motion.div>
@@ -366,7 +483,6 @@ const Projects = () => {
   return (
     <section id="projects" className="relative py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -381,7 +497,6 @@ const Projects = () => {
           </h2>
         </motion.div>
 
-        {/* Projects Grid */}
         <div className="grid md:grid-cols-3 gap-6">
           {projects.map((project, i) => (
             <ProjectCard
@@ -395,14 +510,12 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* Project Detail Modal */}
       <ProjectModal
         project={selectedProject}
         isOpen={!!selectedProject}
         onClose={() => setSelectedProject(null)}
       />
 
-      {/* Case Study Modal */}
       <CaseStudyModal
         project={caseStudyProject}
         isOpen={!!caseStudyProject}
