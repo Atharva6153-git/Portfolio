@@ -15,7 +15,7 @@ import { Toaster } from "./components/ui/toaster";
 
 const Portfolio = () => {
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased overflow-x-hidden">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased">
       <Navbar />
       <main>
         <Hero />

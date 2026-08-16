@@ -173,7 +173,7 @@ const ArchitectureDiagram = ({ architecture }) => {
 
 // ─── Project Card (grid — no "View Details", case study only) ────────────────
 
-const ProjectCard = React.memo(({ project, index, onCaseStudy }) => {
+const ProjectCard = ({ project, index, onCaseStudy }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -230,7 +230,7 @@ const FEATURED_ACCENTS = {
   4: { from: "#f59e0b", to: "#f97316", dim: "rgba(245,158,11,0.08)" },   // UNIFIND — amber/orange
 };
 
-const FeaturedProjectCard = React.memo(({ project, index, onCaseStudy }) => {
+const FeaturedProjectCard = ({ project, index, onCaseStudy }) => {
   const accent = FEATURED_ACCENTS[project.id] ?? FEATURED_ACCENTS[1];
   const isEven = index % 2 === 0;
 
@@ -338,9 +338,8 @@ const FeaturedProjectCard = React.memo(({ project, index, onCaseStudy }) => {
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`View ${project.title} on GitHub`}
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[44px] rounded-lg bg-[hsl(var(--foreground))]/8 hover:bg-[hsl(var(--foreground))]/16 text-[hsl(var(--foreground))] text-xs font-medium border border-[hsl(var(--border))]/50 transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[hsl(var(--foreground))]/8 hover:bg-[hsl(var(--foreground))]/16 text-[hsl(var(--foreground))] text-xs font-medium border border-[hsl(var(--border))]/50 transition-colors"
           >
             <Github className="w-3.5 h-3.5" />
             GitHub
@@ -350,9 +349,8 @@ const FeaturedProjectCard = React.memo(({ project, index, onCaseStudy }) => {
               href={project.live}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`View ${project.title} live demo`}
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[44px] rounded-lg text-xs font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-colors"
               style={{ background: `${accent.from}22`, border: `1px solid ${accent.from}45`, color: accent.from }}
             >
               <ExternalLink className="w-3.5 h-3.5" />
@@ -361,9 +359,8 @@ const FeaturedProjectCard = React.memo(({ project, index, onCaseStudy }) => {
           )}
           {project.caseStudy && (
             <button
-              aria-label={`View ${project.title} case study`}
               onClick={() => onCaseStudy(project)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[44px] rounded-lg bg-[hsl(var(--foreground))] hover:bg-[hsl(var(--foreground))]/90 text-[hsl(var(--background))] text-xs font-semibold transition-colors ml-auto"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[hsl(var(--foreground))] hover:bg-[hsl(var(--foreground))]/90 text-[hsl(var(--background))] text-xs font-semibold transition-colors ml-auto"
             >
               <BookOpen className="w-3.5 h-3.5" />
               View Case Study
@@ -399,9 +396,6 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
           onClick={onClose}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="case-study-title"
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
@@ -417,7 +411,7 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
                 <ChevronRight className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))]/40" />
                 <span className="text-sm font-semibold">{project.title}</span>
               </div>
-              <button onClick={onClose} aria-label="Close case study modal" className="p-2 min-h-[44px] min-w-[44px] rounded-lg hover:bg-[hsl(var(--muted))] transition-colors flex items-center justify-center">
+              <button onClick={onClose} className="p-2 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -428,7 +422,7 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
                 <span className="inline-block px-3 py-1 rounded-full text-[10px] uppercase tracking-wider font-bold border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))]/40 mb-4">
                   {project.highlight}
                 </span>
-                <h2 id="case-study-title" className="text-3xl md:text-4xl font-bold tracking-tight mb-1">{project.title}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-1">{project.title}</h2>
                 <p className="text-[hsl(var(--muted-foreground))] text-sm">{project.year}</p>
               </div>
 
@@ -525,13 +519,13 @@ const CaseStudyModal = ({ project, isOpen, onClose }) => {
               </Section>
 
               <div className="flex gap-3 pt-6 border-t border-[hsl(var(--border))]">
-                <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.title} on GitHub`}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-lg bg-[hsl(var(--foreground))]/10 hover:bg-[hsl(var(--foreground))]/20 text-[hsl(var(--foreground))] font-medium transition-colors">
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[hsl(var(--foreground))]/10 hover:bg-[hsl(var(--foreground))]/20 text-[hsl(var(--foreground))] font-medium transition-colors">
                   <Github className="w-4 h-4" />GitHub
                 </a>
                 {project.live && (
-                  <a href={project.live} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${project.title} live demo`}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-lg bg-[hsl(var(--foreground))] hover:bg-[hsl(var(--foreground))]/90 text-[hsl(var(--background))] font-medium transition-colors">
+                  <a href={project.live} target="_blank" rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[hsl(var(--foreground))] hover:bg-[hsl(var(--foreground))]/90 text-[hsl(var(--background))] font-medium transition-colors">
                     <ExternalLink className="w-4 h-4" />Visit Live
                   </a>
                 )}

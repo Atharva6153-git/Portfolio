@@ -41,7 +41,7 @@ const StatCard = ({ icon: Icon, label, value }) => (
 );
 
 // ─── Repo card ────────────────────────────────────────────────────────────────
-const RepoCard = React.memo(({ repo, index }) => {
+const RepoCard = ({ repo, index }) => {
   const langColor = LANG_COLORS[repo.language] ?? "#8b949e";
   return (
     <motion.a
@@ -229,7 +229,7 @@ const GitHubSection = () => {
     .slice(0, 6);
 
   return (
-    <section id="github" className="relative py-24 md:py-32 bg-[hsl(var(--background))]" aria-live="polite">
+    <section id="github" className="relative py-24 md:py-32 bg-[hsl(var(--background))]">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
 
         {/* Header */}
@@ -313,8 +313,6 @@ const GitHubSection = () => {
                   <img
                     src={profile.avatar_url}
                     alt={profile.login}
-                    loading="lazy"
-                    decoding="async"
                     className="w-10 h-10 rounded-full border border-[hsl(var(--border))]"
                   />
                 )}

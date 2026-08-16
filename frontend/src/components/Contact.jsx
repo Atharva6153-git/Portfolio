@@ -5,27 +5,22 @@ import { Send, Mail, Github, Linkedin, Loader2, Check, FileText } from "lucide-r
 import { personalInfo, emailjsConfig } from "../mock/mock";
 import { useToast } from "../hooks/use-toast";
 
-const FOCUS_RING = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]";
-
 const Contact = () => {
   const formRef = useRef(null);
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
-  const [srMessage, setSrMessage] = useState(""); // announced to screen readers
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", phone: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", doubt: "" });
 
   const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.phone || !form.message) {
+    if (!form.name || !form.phone || !form.doubt) {
       toast({ title: "Missing fields", description: "Please fill in all fields before sending." });
-      setSrMessage("Please fill in all fields before sending.");
       return;
     }
 
     setStatus("sending");
-    setSrMessage("Sending your message…");
 
     const configured =
       emailjsConfig.serviceId !== "YOUR_SERVICE_ID" &&
@@ -42,26 +37,24 @@ const Contact = () => {
         );
       } else {
         await new Promise((r) => setTimeout(r, 900));
+        console.log("[EmailJS not configured] Simulated send:", form);
       }
       setStatus("success");
-      setSrMessage("Message sent successfully. Thanks!");
       toast({
         title: "Message sent",
         description: configured
           ? "Thanks! I'll get back to you soon."
           : "Simulated — add EmailJS keys in .env to deliver real emails.",
       });
-      setForm({ name: "", phone: "", message: "" });
-      setTimeout(() => { setStatus("idle"); setSrMessage(""); }, 2500);
-    } catch {
+      setForm({ name: "", phone: "", doubt: "" });
+      setTimeout(() => setStatus("idle"), 2500);
+    } catch (err) {
+      console.error(err);
       setStatus("error");
-      setSrMessage("Failed to send message. Please try again.");
       toast({ title: "Failed to send", description: "Something went wrong. Try again." });
-      setTimeout(() => { setStatus("idle"); setSrMessage(""); }, 2500);
+      setTimeout(() => setStatus("idle"), 2500);
     }
   };
-
-  const linkCardClass = `flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--foreground))]/30 transition-colors group ${FOCUS_RING} rounded-2xl`;
 
   return (
     <section id="contact" className="relative py-24 md:py-32">
@@ -80,9 +73,6 @@ const Contact = () => {
           </h2>
         </motion.div>
 
-        {/* Screen-reader live region for form status */}
-        <div role="status" aria-live="polite" className="sr-only">{srMessage}</div>
-
         <div className="grid lg:grid-cols-5 gap-8">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -91,9 +81,12 @@ const Contact = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-2 space-y-4"
           >
-            <a href={`mailto:${personalInfo.email}`} className={linkCardClass}>
-              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0">
-                <Mail className="w-5 h-5" aria-hidden="true" />
+            <a
+              href={`mailto:${personalInfo.email}`}
+              className="flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--foreground))]/30 transition-colors group"
+            >
+              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--muted))] flex items-center justify-center">
+                <Mail className="w-5 h-5" />
               </div>
               <div className="min-w-0">
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">Email</p>
@@ -101,9 +94,14 @@ const Contact = () => {
               </div>
             </a>
 
-            <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" className={linkCardClass}>
-              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0">
-                <Github className="w-5 h-5" aria-hidden="true" />
+            <a
+              href={personalInfo.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--foreground))]/30 transition-colors group"
+            >
+              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--muted))] flex items-center justify-center">
+                <Github className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">GitHub</p>
@@ -111,9 +109,14 @@ const Contact = () => {
               </div>
             </a>
 
-            <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className={linkCardClass}>
-              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0">
-                <Linkedin className="w-5 h-5" aria-hidden="true" />
+            <a
+              href={personalInfo.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--foreground))]/30 transition-colors group"
+            >
+              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--muted))] flex items-center justify-center">
+                <Linkedin className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">LinkedIn</p>
@@ -125,14 +128,14 @@ const Contact = () => {
               href={personalInfo.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--foreground))]/20 bg-[hsl(var(--foreground))]/5 hover:bg-[hsl(var(--foreground))]/10 hover:border-[hsl(var(--foreground))]/35 transition-colors group ${FOCUS_RING}`}
+              className="flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--foreground))]/20 bg-[hsl(var(--foreground))]/5 hover:bg-[hsl(var(--foreground))]/10 hover:border-[hsl(var(--foreground))]/35 transition-colors group"
             >
-              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--foreground))]/10 flex items-center justify-center flex-shrink-0">
-                <FileText className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true" />
+              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--foreground))]/10 flex items-center justify-center">
+                <FileText className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
               </div>
               <div>
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">Resume</p>
-                <p className="text-sm font-medium">View PDF</p>
+                <p className="text-sm font-medium">Download PDF</p>
               </div>
             </a>
           </motion.div>
@@ -140,8 +143,6 @@ const Contact = () => {
           <motion.form
             ref={formRef}
             onSubmit={onSubmit}
-            aria-label="Contact form"
-            noValidate
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -150,31 +151,23 @@ const Contact = () => {
           >
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="contact-name" className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-                  Name
-                </label>
+                <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Name</label>
                 <input
-                  id="contact-name"
                   name="name"
                   value={form.name}
                   onChange={onChange}
                   type="text"
-                  autoComplete="name"
                   placeholder="Your name"
                   className="mt-2 w-full bg-transparent border-b border-[hsl(var(--border))] py-2 text-sm outline-none focus:border-[hsl(var(--foreground))] transition-colors"
                 />
               </div>
               <div>
-                <label htmlFor="contact-phone" className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-                  Phone
-                </label>
+                <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Phone</label>
                 <input
-                  id="contact-phone"
                   name="phone"
                   value={form.phone}
                   onChange={onChange}
                   type="tel"
-                  autoComplete="tel"
                   placeholder="+91 98765 43210"
                   className="mt-2 w-full bg-transparent border-b border-[hsl(var(--border))] py-2 text-sm outline-none focus:border-[hsl(var(--foreground))] transition-colors"
                 />
@@ -182,37 +175,35 @@ const Contact = () => {
             </div>
 
             <div>
-              <label htmlFor="contact-message" className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-                Message
-              </label>
+              <label className="text-xs text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Message</label>
               <textarea
-                id="contact-message"
-                name="message"
-                value={form.message}
+                name="doubt"
+                value={form.doubt}
                 onChange={onChange}
                 rows={5}
-                placeholder="Tell me about your project…"
+                placeholder="Tell me about your project..."
                 className="mt-2 w-full bg-transparent border-b border-[hsl(var(--border))] py-2 text-sm outline-none focus:border-[hsl(var(--foreground))] transition-colors resize-none"
               />
             </div>
 
             <div className="pt-4 flex items-center justify-between flex-wrap gap-4">
               <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                Prefer email? —{" "}
-                <a className="underline hover:text-[hsl(var(--foreground))]" href={`mailto:${personalInfo.email}`}>
-                  {personalInfo.email}
-                </a>
+                Prefer email? — <a className="underline hover:text-[hsl(var(--foreground))]" href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a>
               </p>
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className={`inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(var(--foreground))] text-[hsl(var(--background))] font-medium hover:opacity-90 transition-opacity disabled:opacity-60 ${FOCUS_RING}`}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[hsl(var(--foreground))] text-[hsl(var(--background))] font-medium hover:opacity-90 transition-opacity disabled:opacity-60"
               >
-                {status === "sending" && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
-                {status === "success" && <Check className="w-4 h-4" aria-hidden="true" />}
-                {status !== "sending" && status !== "success" && <Send className="w-4 h-4" aria-hidden="true" />}
+                {status === "sending" && <Loader2 className="w-4 h-4 animate-spin" />}
+                {status === "success" && <Check className="w-4 h-4" />}
+                {status !== "sending" && status !== "success" && <Send className="w-4 h-4" />}
                 <span>
-                  {status === "sending" ? "Sending…" : status === "success" ? "Sent!" : "Send Message"}
+                  {status === "sending"
+                    ? "Sending..."
+                    : status === "success"
+                    ? "Sent!"
+                    : "Send Message"}
                 </span>
               </button>
             </div>

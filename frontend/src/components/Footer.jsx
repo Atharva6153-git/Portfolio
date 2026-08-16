@@ -10,31 +10,30 @@ const Footer = () => {
           © {new Date().getFullYear()} Built by Atharva Jadhav.
         </p>
         <div className="flex items-center gap-3">
-          {/* 44×44 touch targets on all icon links */}
           <a
             href={`mailto:${personalInfo.email}`}
-            aria-label="Send email to Atharva Jadhav"
-            className="w-11 h-11 rounded-full border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+            aria-label="Email"
+            className="w-9 h-9 rounded-full border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors"
           >
-            <Mail className="w-4 h-4" aria-hidden="true" />
+            <Mail className="w-4 h-4" />
           </a>
           <a
             href={personalInfo.github}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Atharva Jadhav on GitHub (opens in new tab)"
-            className="w-11 h-11 rounded-full border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+            aria-label="GitHub"
+            className="w-9 h-9 rounded-full border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors"
           >
-            <Github className="w-4 h-4" aria-hidden="true" />
+            <Github className="w-4 h-4" />
           </a>
           <a
             href={personalInfo.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Atharva Jadhav on LinkedIn (opens in new tab)"
-            className="w-11 h-11 rounded-full border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+            aria-label="LinkedIn"
+            className="w-9 h-9 rounded-full border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors"
           >
-            <Linkedin className="w-4 h-4" aria-hidden="true" />
+            <Linkedin className="w-4 h-4" />
           </a>
         </div>
       </div>
