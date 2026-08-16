@@ -74,7 +74,7 @@ const LearningTrack = ({ config, items, index }) => {
       {/* Items */}
       <div className="flex flex-col gap-3">
         {items.map((item, i) => (
-          <div key={i} className="group">
+          <div key={item.name} className="group">
             <div className="flex items-center gap-2 mb-0.5">
               <span
                 className="px-2.5 py-1 rounded-lg text-[11px] font-semibold"
@@ -127,6 +127,7 @@ const About = () => {
                 src={personalInfo.profileImage}
                 alt="Atharva Jadhav"
                 loading="lazy"
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />

@@ -43,12 +43,19 @@ const TechKey = ({ item, index, isMobile, onClick }) => {
 
   if (isMobile) {
     return (
-      <div 
-        className={keyClass} 
+      <div
+        className={keyClass}
         style={style}
         onClick={() => !isEmpty && onClick?.(item)}
-        role="button"
+        onKeyDown={(e) => {
+          if (!isEmpty && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            onClick?.(item);
+          }
+        }}
+        role={isEmpty ? "presentation" : "button"}
         tabIndex={isEmpty ? -1 : 0}
+        aria-label={isEmpty ? undefined : item.name}
       >
         {!isEmpty && <TechKeyIcon item={item} />}
       </div>
@@ -60,14 +67,21 @@ const TechKey = ({ item, index, isMobile, onClick }) => {
   const layers = Array.from({ length: depth });
 
   return (
-    <motion.div 
-      className={keyClass} 
-      style={{ ...style, transformStyle: "preserve-3d", position: "relative", cursor: isEmpty ? "default" : "pointer" }} 
+    <motion.div
+      className={keyClass}
+      style={{ ...style, transformStyle: "preserve-3d", position: "relative", cursor: isEmpty ? "default" : "pointer" }}
       title={item?.name}
       whileHover={!isMobile && !isEmpty ? "hover" : undefined}
       onClick={() => !isEmpty && onClick?.(item)}
-      role="button"
+      onKeyDown={(e) => {
+        if (!isEmpty && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          onClick?.(item);
+        }
+      }}
+      role={isEmpty ? "presentation" : "button"}
       tabIndex={isEmpty ? -1 : 0}
+      aria-label={isEmpty ? undefined : item.name}
     >
       <motion.div
         initial={{ y: -30, opacity: 0 }}

@@ -68,7 +68,7 @@ const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-[hsl(var(--border))] hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors"
+              className="inline-flex items-center justify-center w-12 h-12 min-h-[44px] min-w-[44px] rounded-full border border-[hsl(var(--border))] hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors"
             >
               <Github className="w-5 h-5" />
             </a>
@@ -77,7 +77,7 @@ const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-[hsl(var(--border))] hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors"
+              className="inline-flex items-center justify-center w-12 h-12 min-h-[44px] min-w-[44px] rounded-full border border-[hsl(var(--border))] hover:border-[hsl(var(--foreground))]/40 hover:bg-[hsl(var(--muted))] transition-colors"
             >
               <Linkedin className="w-5 h-5" />
             </a>

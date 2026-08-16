@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Medal, Star, Github, ExternalLink, ChevronDown, ChevronUp, Zap } from "lucide-react";
 import { timelineEvents } from "../mock/mock";
@@ -57,7 +57,7 @@ const TimelineEntry = ({ event, index, isLast }) => {
           className="relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 mt-1"
           style={{ background: t.dotBg, border: `2px solid ${t.dotBorder}` }}
         >
-          <Icon className="w-4 h-4" style={{ color: t.dot }} />
+          <Icon className="w-4 h-4" style={{ color: t.dot }} aria-hidden="true" />
         </div>
         {/* Vertical line to next */}
         {!isLast && (
@@ -78,7 +78,7 @@ const TimelineEntry = ({ event, index, isLast }) => {
             {/* Top row: badges + year */}
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${t.badge}`}>
-                <Icon className="w-3 h-3" />
+                <Icon className="w-3 h-3" aria-hidden="true" />
                 {event.result}
               </span>
               <span className="px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-wider bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]/30">
@@ -119,9 +119,11 @@ const TimelineEntry = ({ event, index, isLast }) => {
             {(event.tech.length > 0 || event.links.length > 0) && (
               <button
                 onClick={() => setExpanded(v => !v)}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+                aria-expanded={expanded}
+                aria-controls={`timeline-detail-${event.id}`}
+                className="mt-4 inline-flex items-center gap-1.5 px-2 py-2 min-h-[44px] text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] rounded"
               >
-                {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                {expanded ? <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" /> : <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />}
                 {expanded ? "Show less" : "Tech & links"}
               </button>
             )}
@@ -131,6 +133,7 @@ const TimelineEntry = ({ event, index, isLast }) => {
           <AnimatePresence initial={false}>
             {expanded && (
               <motion.div
+                id={`timeline-detail-${event.id}`}
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
@@ -170,7 +173,8 @@ const TimelineEntry = ({ event, index, isLast }) => {
                               href={link.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                              aria-label={`Visit ${link.label} for ${event.project || event.event}`}
+                              className={`inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] rounded-lg text-xs font-medium transition-colors ${
                                 isGithub
                                   ? "bg-[hsl(var(--foreground))]/8 hover:bg-[hsl(var(--foreground))]/16 text-[hsl(var(--foreground))] border border-[hsl(var(--border))]/50"
                                   : "bg-[hsl(var(--foreground))] hover:bg-[hsl(var(--foreground))]/90 text-[hsl(var(--background))]"
@@ -197,6 +201,9 @@ const TimelineEntry = ({ event, index, isLast }) => {
 // ─── Section ──────────────────────────────────────────────────────────────────
 
 const Experience = () => {
+  const won    = useMemo(() => timelineEvents.filter(e => e.tier === "gold").length,    []);
+  const finalist = useMemo(() => timelineEvents.filter(e => e.tier === "silver").length, []);
+
   return (
     <section id="experience" className="relative py-24 md:py-32 bg-[hsl(var(--background))]">
       <div className="max-w-3xl mx-auto px-6 md:px-10">
@@ -216,7 +223,7 @@ const Experience = () => {
           </h2>
         </motion.div>
 
-        {/* Stats row */}
+        {/* Stats row — derived from real data */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -225,9 +232,9 @@ const Experience = () => {
           className="grid grid-cols-3 gap-3 mb-14"
         >
           {[
-            { value: "1", label: "Hackathon Won" },
-            { value: "1", label: "Finalist" },
-            { value: `${timelineEvents.length}`, label: "Events Total" },
+            { value: String(won),                    label: "Hackathon Won" },
+            { value: String(finalist),               label: "Finalist" },
+            { value: String(timelineEvents.length),  label: "Events Total" },
           ].map(stat => (
             <div
               key={stat.label}
