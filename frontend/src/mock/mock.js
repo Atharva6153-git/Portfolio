@@ -92,6 +92,36 @@ export const projects = [
     featured: {
       frontend: ["React", "Vite", "Tailwind CSS", "Axios"],
       backend: ["FastAPI", "SQLAlchemy", "JWT", "Pydantic", "YOLO DL Detection", "Tesseract OCR"]
+    },
+    caseStudy: {
+      overview: "ZenoGuard is an AI-powered micro-insurance platform built for gig economy workers who lack access to traditional insurance. The platform delivers personalized, risk-based insurance policies with automated KYC, claim verification via computer vision, and blockchain-enforced payouts.",
+      problem: "Gig workers — delivery drivers, freelancers, and daily wage earners — are excluded from conventional insurance due to irregular income and lack of formal employment records. Claim fraud and manual verification delays make existing solutions economically unviable for this segment.",
+      solution: "We built a full-stack platform that uses ML-based risk scoring to price policies individually, automates KYC using Tesseract OCR and document parsing, verifies claims through YOLO-based image detection, and processes payouts via Razorpay with Solidity smart contracts enforcing policy terms on-chain.",
+      contribution: "I handled the entire backend architecture — FastAPI service design, PostgreSQL schema, SQLAlchemy ORM layer, JWT authentication, and integration of the YOLO-based claim verification pipeline. I also integrated Razorpay payment flows and coordinated API contracts with the frontend team.",
+      keyFeatures: [
+        "Risk-based dynamic policy pricing using ML scoring",
+        "Automated KYC with Tesseract OCR document verification",
+        "YOLO deep learning model for visual claim verification",
+        "Solidity smart contracts for transparent payout enforcement",
+        "Razorpay payment gateway for premium collection and disbursements",
+        "Cloudinary image management for claim document uploads",
+        "JWT-secured REST API with role-based access control"
+      ],
+      challenges: [
+        {
+          challenge: "Integrating YOLO inference inside a FastAPI service without blocking the event loop",
+          solution: "Offloaded model inference to a background task using FastAPI's BackgroundTasks, returning a job ID immediately and polling for results."
+        },
+        {
+          challenge: "Coordinating smart contract state with the off-chain PostgreSQL database",
+          solution: "Used Web3.py event listeners to sync on-chain payout events back to the database, keeping both layers consistent."
+        },
+        {
+          challenge: "Building and shipping a full production backend within the hackathon time limit",
+          solution: "Prioritised API contracts early so frontend and backend could develop in parallel. Used Pydantic models as the single source of truth for request/response shapes."
+        }
+      ],
+      outcome: "Submitted at Antilabs Hackathon where the team reached the finals. The platform demonstrated an end-to-end working flow from policy creation through claim verification to payout."
     }
   },
   {
@@ -106,6 +136,31 @@ export const projects = [
     featured: {
       frontend: ["React", "Tailwind CSS", "Axios"],
       backend: ["Express.js", "MongoDB", "JWT", "Stripe"]
+    },
+    caseStudy: {
+      overview: "A full-stack e-commerce web application with a product catalog, shopping cart, user authentication, and secure checkout — built to practice and demonstrate end-to-end MERN stack development.",
+      problem: "Learning e-commerce architecture requires handling state management across many moving parts: cart persistence, auth flows, protected routes, and payment integration. Most tutorials stop short of a production-grade implementation.",
+      solution: "Built a complete MERN stack application with JWT-based authentication, a MongoDB product catalog, React context for cart state, and Stripe for checkout. Deployed the frontend on Vercel.",
+      contribution: "Sole developer. Designed and built the full stack — Express REST API, MongoDB schemas, React UI, cart logic, auth middleware, and payment integration.",
+      keyFeatures: [
+        "Product catalog with search and category filtering",
+        "Shopping cart with persistent state via React Context",
+        "JWT-based user registration and login",
+        "Protected checkout route requiring authentication",
+        "Stripe payment gateway integration",
+        "Responsive UI built with Tailwind CSS"
+      ],
+      challenges: [
+        {
+          challenge: "Keeping cart state in sync across page refreshes without a backend cart service",
+          solution: "Persisted cart state to localStorage and rehydrated on load, so the cart survives refreshes without requiring a server round-trip."
+        },
+        {
+          challenge: "Securing API routes without over-engineering middleware",
+          solution: "Used a single reusable JWT verification middleware applied selectively to protected Express routes."
+        }
+      ],
+      outcome: "A fully functional and deployed e-commerce application. Served as the foundation for understanding full-stack architecture patterns used in later, more complex projects."
     }
   },
   {
@@ -120,6 +175,31 @@ export const projects = [
     featured: {
       frontend: ["React", "Tailwind CSS", "Axios"],
       backend: ["Flask", "Python", "Gemini API", "SQLAlchemy"]
+    },
+    caseStudy: {
+      overview: "B-Bot MedGuide is an AI-powered health chatbot that provides users with preliminary medical guidance using Google Gemini's language model. The goal was to make basic health information more accessible through a conversational interface.",
+      problem: "People often search for medical information across multiple unreliable sources. A conversational interface grounded in a capable LLM can provide clearer, contextual responses while clearly communicating that it is not a substitute for professional medical advice.",
+      solution: "Built a Flask backend that routes user queries to the Gemini API with a system prompt constraining responses to health-related topics. The React frontend renders a chat-style interface with message history and loading states.",
+      contribution: "Full-stack sole developer. Designed the Flask API, prompt engineering for medical context, Gemini API integration, SQLAlchemy conversation storage, and the React chat UI.",
+      keyFeatures: [
+        "Conversational chat interface with message history",
+        "Google Gemini API integration with health-scoped system prompt",
+        "Conversation persistence with SQLAlchemy",
+        "Flask REST API with CORS handling for React frontend",
+        "Empathetic response tone enforced through prompt design",
+        "Deployed on Render with environment-based API key management"
+      ],
+      challenges: [
+        {
+          challenge: "Preventing the model from responding to off-topic or harmful queries",
+          solution: "Crafted a detailed system prompt that scopes the model strictly to health guidance and instructs it to redirect off-topic questions."
+        },
+        {
+          challenge: "Managing latency from the Gemini API in the chat UI",
+          solution: "Added a typing indicator on the frontend while awaiting the API response, improving perceived responsiveness."
+        }
+      ],
+      outcome: "A deployed, publicly accessible chatbot demonstrating LLM integration in a health context. Strengthened understanding of prompt engineering, Flask API design, and AI product UX patterns."
     }
   },
   {
@@ -134,6 +214,33 @@ export const projects = [
     featured: {
       frontend: ["React", "Tailwind CSS", "Framer Motion", "shadcn/ui", "Lucide Icons"],
       backend: ["EmailJS", "Python Flask", "Vercel", "CRACO"]
+    },
+    caseStudy: {
+      overview: "A personal developer portfolio designed to present projects, technical skills, and hackathon achievements in a clean, animated interface. Built from scratch with React and deployed on Vercel.",
+      problem: "Generic portfolio templates don't communicate personal style or technical depth. The goal was to build something that feels designed — not assembled — and showcases frontend skills directly through the interface itself.",
+      solution: "Designed and built a single-page portfolio with a component-per-section architecture. Used Framer Motion for scroll-triggered animations, shadcn/ui for accessible components, and a custom 3D CSS keyboard to display the tech stack interactively.",
+      contribution: "Sole developer and designer. Every component, animation, layout decision, and data structure was built and iterated on personally.",
+      keyFeatures: [
+        "3D interactive tech keyboard with press-down animation and click-to-reveal tech names",
+        "Scroll-triggered entrance animations using Framer Motion",
+        "Project grid with expandable detail modals and case study drawer",
+        "Hackathon achievements section with tiered gold/silver/neutral badges",
+        "Stack narrative cards explaining how technologies connect to outcomes",
+        "Dark mode with CSS custom properties",
+        "Working contact form via EmailJS — no backend required",
+        "Fully responsive across mobile and desktop"
+      ],
+      challenges: [
+        {
+          challenge: "Creating a convincing 3D keyboard with pure CSS and React — no 3D library",
+          solution: "Used stacked absolutely-positioned div layers with translateZ to simulate depth, and Framer Motion variants for the press-down hover animation."
+        },
+        {
+          challenge: "Repeated Vercel build failures due to package manager conflicts and JSON syntax errors",
+          solution: "Audited package.json for trailing commas, removed the packageManager field to let Vercel auto-detect npm, deleted yarn.lock to force clean resolution, and removed all custom vercel.json overrides."
+        }
+      ],
+      outcome: "Live at portfolio-apexgg.vercel.app. Used as the primary professional presence when applying for opportunities and sharing work."
     }
   },
   {
@@ -148,6 +255,31 @@ export const projects = [
     featured: {
       frontend: ["React", "Tailwind CSS", "Firebase"],
       backend: ["Node.js", "Express.js", "MongoDB", "JWT"]
+    },
+    caseStudy: {
+      overview: "UNIFIND is a student-focused discovery platform that helps users find universities, courses, and scholarships matched to their academic profile. Built as a collaborative hackathon project by Team Gambit.",
+      problem: "Students researching higher education face fragmented information spread across dozens of websites. There was no single platform to filter universities and scholarships based on a student's specific academic background and preferences.",
+      solution: "Built a web platform where students enter their profile details and receive filtered, relevant university and scholarship listings. Used Firebase for authentication, MongoDB for data storage, and Node.js/Express for the API layer.",
+      contribution: "Worked on the frontend React components, Firebase authentication integration, and connecting the UI to the backend API. Collaborated with the team under hackathon time constraints to ship a working product.",
+      keyFeatures: [
+        "Profile-based university and course discovery",
+        "Scholarship listings filtered by student eligibility",
+        "Firebase authentication for secure user accounts",
+        "MongoDB-backed data layer for universities and scholarships",
+        "Node.js/Express REST API",
+        "Responsive UI built with React and Tailwind CSS"
+      ],
+      challenges: [
+        {
+          challenge: "Coordinating frontend and backend development simultaneously within a hackathon",
+          solution: "Agreed on API contracts upfront using mock data on the frontend, so both sides could build in parallel and integrate at the end."
+        },
+        {
+          challenge: "Filtering relevant results without a recommendation engine",
+          solution: "Implemented server-side query filtering based on user profile fields, which was fast to build and sufficient for the hackathon scope."
+        }
+      ],
+      outcome: "Shipped a fully working platform within the hackathon deadline. The project is live at teamgambit.tech and remains accessible as a demonstration of the team's collaborative capability."
     }
   },
 ];
