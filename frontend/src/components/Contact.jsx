@@ -128,7 +128,6 @@ const Contact = () => {
               href={personalInfo.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              download="Atharva_Jadhav_Resume.pdf"
               className="flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--foreground))]/20 bg-[hsl(var(--foreground))]/5 hover:bg-[hsl(var(--foreground))]/10 hover:border-[hsl(var(--foreground))]/35 transition-colors group"
             >
               <div className="w-11 h-11 rounded-xl bg-[hsl(var(--foreground))]/10 flex items-center justify-center">
