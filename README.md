@@ -1,231 +1,314 @@
 <div align="center">
 
-# ⚡ Atharva Jadhav — Portfolio
+# Atharva Jadhav — Developer Portfolio
 
-### _Full Stack Developer · Building things that ship._
+**Full Stack Developer · Mumbai, India**
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
-[![Tailwind](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
-[![License](https://img.shields.io/badge/License-MIT-A78BFA?style=for-the-badge)](#-license)
-
-<br />
-
-**🌐 Live Demo** · https://portfolio-apexgg.vercel.app/  &nbsp;·&nbsp;  **📫 Contact** · [atharvaj7822@gmail.com](mailto:atharvaj7822@gmail.com)
+[🌐 Live Site](https://portfolio-apexgg.vercel.app/) &nbsp;·&nbsp;
+[📫 Email](mailto:atharvaj7822@gmail.com) &nbsp;·&nbsp;
+[💼 LinkedIn](https://www.linkedin.com/in/atharva-jadhav-8a0830334/) &nbsp;·&nbsp;
+[🐙 GitHub](https://github.com/Atharva6153-git)
 
 </div>
 
 ---
 
-## 🎨 About This Portfolio
+## About
 
-A modern, animated developer portfolio built from the ground up — inspired by minimalist agency-style websites, engineered with clean React architecture, and finished with an animated 3D isometric tech keyboard as the hero centerpiece.
+Personal developer portfolio for **Atharva Jadhav**, a Computer Engineering student (B.E. 2024–2028) from Mumbai specialising in full-stack development, microservices architecture, and AI-integrated applications.
 
-> _"Design is not just what it looks like and feels like. Design is how it works."_ — Steve Jobs
+The site presents projects, hackathon experience, tech stack, GitHub activity, and contact information in a clean, animated single-page layout. Every section is data-driven through a central `mock.js` file, making content updates straightforward without touching component logic.
 
-<br />
+**Live at:** https://portfolio-apexgg.vercel.app/
 
-## ✨ Highlights
+---
 
-|  | Feature |
-|:---:|:---|
-| 🎹 | **Animated 3D tech-stack keyboard** rendered with pure CSS 3D transforms — no libraries |
-| 🌗 | **Dark ↔ Light theme toggle** with buttery-smooth Framer Motion sun/moon transitions |
-| ✉️ | **Working contact form** powered by EmailJS — messages hit your inbox in real time |
-| 🚀 | **60fps scroll animations** — every section entrance is choreographed with Framer Motion |
-| 📱 | **Fully responsive** — pixel-perfect from 4K displays down to mobile |
-| 🎯 | **Zero backend** — pure frontend, deploys in seconds on Vercel / Netlify / GitHub Pages |
-| 💾 | **Downloadable resume** — one-click PDF download button in the hero |
+## Features
 
-<br />
+- **3D interactive tech keyboard** — hero section keyboard built with pure CSS 3D transforms and stacked `div` layers. No Three.js or WebGL. Each key is clickable and shows the technology name.
+- **Dark / Light theme** — system-aware default with a manual toggle. Theme state managed via React Context.
+- **Project case studies** — each project card opens a full case study modal with: overview, problem statement, solution, contribution, architecture diagram, key features, challenges, outcome, and links.
+- **Interactive architecture diagrams** — per-project diagrams rendered in pure React/CSS showing real data flow layers (Client → API → Database → External Services) with hover tooltips on each node.
+- **Featured projects section** — three highlighted projects displayed as large horizontal cards above the full project grid.
+- **Hackathons & Experience timeline** — vertical timeline of all six hackathon/project events with expandable tech and links per entry.
+- **GitHub section** — live data from the GitHub API: public repos, followers, total stars, language breakdown bar, top 6 repos by stars. Graceful fallback UI on API failure.
+- **Currently Learning** — three-track learning status (Learning / Improving / Next Goal) embedded in the About section.
+- **Working contact form** — EmailJS integration sends messages directly to inbox with no backend required.
+- **SEO** — meta description, Open Graph, Twitter Card, JSON-LD Person schema, canonical URL, robots.txt, sitemap.xml.
+- **Fully responsive** — mobile-first layout across all sections.
 
-## 🛠️ Built With
+---
 
-### Frontend Stack
+## Tech Stack
+
+### Frontend
+
+| Category | Technologies |
+|---|---|
+| Framework | React 19 |
+| Styling | Tailwind CSS 3.4, CSS custom properties |
+| Animations | Framer Motion 12 |
+| Component library | shadcn/ui (Radix UI primitives) |
+| Icons | Lucide React |
+| Routing | React Router 7 |
+| Forms | React Hook Form + Zod |
+| Build tool | Create React App + CRACO |
+| Email | EmailJS (browser-side, no backend) |
+
+### Backend (scaffold — not used by the live frontend)
+
+The `backend/` directory contains a FastAPI + MongoDB scaffold that was part of the original project template. It is **not connected to the deployed portfolio frontend**. The frontend runs entirely standalone.
+
+| Technology | Version |
+|---|---|
+| FastAPI | 0.110.1 |
+| Uvicorn | 0.25.0 |
+| Motor (async MongoDB) | 3.3.1 |
+| Pydantic | ≥ 2.6.4 |
+| Python-dotenv | ≥ 1.0.1 |
+
+### Deployment
+
+| Service | Purpose |
+|---|---|
+| Vercel | Frontend hosting + CI/CD (auto-deploy on push to `main`) |
+| GitHub | Source control |
+
+---
+
+## Project Structure
+
 ```
-⚛  React 19          🎨  Tailwind CSS       🎬  Framer Motion
-🧩  shadcn/ui         🔤  Space Grotesk      💠  lucide-react
+Portfolio/
+├── frontend/                        # React application (deployed)
+│   ├── public/
+│   │   ├── index.html               # Full SEO meta tags, OG, Twitter Card, JSON-LD
+│   │   ├── robots.txt
+│   │   └── sitemap.xml
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx           # Fixed nav with theme toggle + fullscreen menu
+│   │   │   ├── Hero.jsx             # Landing section + 3D keyboard + social links
+│   │   │   ├── TechKeyboard.jsx     # Pure CSS 3D isometric keyboard component
+│   │   │   ├── About.jsx            # Bio, stats, Currently Learning tracks
+│   │   │   ├── Achievements.jsx     # Stack narrative cards + hackathon badges
+│   │   │   ├── Experience.jsx       # Vertical hackathon/project timeline
+│   │   │   ├── GitHubSection.jsx    # Live GitHub API data — repos, languages, stats
+│   │   │   ├── Projects.jsx         # Featured cards + grid + case study modals
+│   │   │   │                        #   └─ includes ArchitectureDiagram component
+│   │   │   ├── Contact.jsx          # EmailJS contact form + social link cards
+│   │   │   ├── Footer.jsx
+│   │   │   └── ui/                  # shadcn/ui primitives (auto-generated)
+│   │   ├── context/
+│   │   │   └── ThemeContext.jsx     # Dark/light theme state
+│   │   ├── hooks/
+│   │   │   └── use-toast.js
+│   │   ├── mock/
+│   │   │   └── mock.js              # Single source of truth for all content
+│   │   ├── lib/
+│   │   │   └── utils.js
+│   │   ├── App.js                   # Root component + route
+│   │   ├── App.css                  # Global styles, keyboard CSS, achievement CSS
+│   │   └── index.css                # Tailwind directives + CSS variable tokens
+│   ├── .env.example
+│   ├── craco.config.js
+│   ├── jsconfig.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   └── tailwind.config.js (auto-generated by shadcn)
+│
+├── backend/                         # FastAPI scaffold (not connected to frontend)
+│   ├── server.py                    # FastAPI app with /api/status endpoints
+│   ├── requirements.txt
+│   └── pytest.ini
+│
+└── README.md
 ```
 
-### Integrations & Tooling
-```
-📧  EmailJS           🎯  React Router 7     ⚡  Craco / CRA
-📦  Yarn              🐙  Git + GitHub       🚀  Vercel
-```
+---
 
-<br />
+## Running Locally
 
-## 🗺️ Site Map
+### Prerequisites
 
-```
-┌─────────────────────────────────────────┐
-│  🏠  Hero          →  3D tech keyboard  │
-│  👤  About         →  Bio + stats       │
-│  🧰  Tech Stack    →  20+ tools grid    │
-│  💼  Projects      →  4 featured builds │
-│  ✉️   Contact       →  EmailJS form      │
-│  🦶  Footer        →  Social links      │
-└─────────────────────────────────────────┘
-```
+- Node.js ≥ 18
+- npm or yarn
 
-<br />
-
-## 🚀 Quick Start
+### Frontend setup
 
 ```bash
-# 1️⃣  Clone the repo
+# 1. Clone the repository
 git clone https://github.com/Atharva6153-git/Portfolio.git
 cd Portfolio/frontend
 
-# 2️⃣  Install dependencies
+# 2. Install dependencies
+npm install
+# or
 yarn install
 
-# 3️⃣  Set up environment
+# 3. Copy the environment file
 cp .env.example .env
-# Then edit .env with your EmailJS keys
 
-# 4️⃣  Fire it up 🔥
-yarn start
+# 4. Fill in your EmailJS credentials (see Environment Variables below)
+# The site works without them — the contact form will log to console instead
+
+# 5. Start the dev server
+npm start
 ```
 
-Now open **http://localhost:3000** — your portfolio is live locally!
+Open **http://localhost:3000**
 
-<br />
+### Backend setup (optional)
 
-## 🔑 Environment Variables
+The backend is a standalone FastAPI service not connected to the portfolio frontend. You only need this if you want to run or extend the API scaffold.
 
-Create `frontend/.env` with the following:
+```bash
+cd Portfolio/backend
+
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate       # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Create a .env file with required variables
+# (see Environment Variables below)
+
+# Start the server
+uvicorn server:app --reload --port 8001
+```
+
+API will be available at **http://localhost:8001/api**
+
+---
+
+## Environment Variables
+
+### Frontend — `frontend/.env`
 
 ```env
-# React backend (optional, only if adding a backend later)
+# Backend URL (only needed if connecting the FastAPI backend)
 REACT_APP_BACKEND_URL=http://localhost:8001
 
+# Required for the WebSocket dev server on some setups
+WDS_SOCKET_PORT=443
+
 # EmailJS — get these at https://www.emailjs.com/
+# Without these, the contact form logs to console instead of sending
 REACT_APP_EMAILJS_SERVICE_ID=your_service_id
 REACT_APP_EMAILJS_TEMPLATE_ID=your_template_id
 REACT_APP_EMAILJS_PUBLIC_KEY=your_public_key
 ```
 
-<details>
-<summary><b>📮 Setting up EmailJS (click to expand)</b></summary>
+**Setting up EmailJS:**
 
-1. Sign up free at [emailjs.com](https://www.emailjs.com/) (200 emails/month)
-2. Connect your Gmail as an **Email Service**
+1. Sign up at [emailjs.com](https://www.emailjs.com/) — free tier is 200 emails/month
+2. Connect your Gmail as an Email Service
 3. Create a template with variables: `{{name}}`, `{{phone}}`, `{{doubt}}`
 4. Copy your Service ID, Template ID, and Public Key into `.env`
-5. Restart the dev server → contact form is live 🎉
 
-</details>
+### Backend — `backend/.env`
 
-<br />
-
-## 🌐 Deploy on Vercel
-
-<div align="center">
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Atharva6153-git/Portfolio)
-
-</div>
-
-**Manual steps:**
-
-1. Import this repo on [vercel.com/new](https://vercel.com/new)
-2. Set **Root Directory** → `frontend` ⚠️ _(critical)_
-3. Add all three `REACT_APP_EMAILJS_*` env vars under **Settings → Environment Variables**
-4. Click **Deploy** → done in ~90 seconds 🚀
-
-<br />
-
-## 📁 Project Structure
-
+```env
+MONGO_URL=mongodb://localhost:27017
+DB_NAME=portfolio
+CORS_ORIGINS=http://localhost:3000
 ```
-Portfolio/
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Hero.jsx           ← Landing + 3D keyboard
-│   │   │   ├── About.jsx
-│   │   │   ├── TechStack.jsx
-│   │   │   ├── Projects.jsx
-│   │   │   ├── Contact.jsx        ← EmailJS wired here
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Navbar.jsx
-│   │   │   └── TechKeyboard.jsx   ← Pure CSS 3D magic ✨
-│   │   ├── context/
-│   │   │   └── ThemeContext.jsx   ← Dark/light state
-│   │   ├── mock/
-│   │   │   └── mock.js            ← All content lives here
-│   │   ├── App.js
-│   │   └── index.css
-│   ├── .env.example
-│   ├── package.json
-│   └── tailwind.config.js
-└── README.md
-```
-
-<br />
-
-## 💼 Featured Projects
-
-| Project | Stack | Link |
-|:---|:---|:---:|
-| 📈 **Crypto Pulse** — Real-time crypto tracker | React · Node · MongoDB | [🔗](https://github.com/Atharva6153-git/Crypto-Pulse) |
-| 🛒 **E-Commerce Platform** — Full-featured store | React · Express · MongoDB | [🔗](https://github.com/Atharva6153-git/E-Commerce) |
-| 🩺 **B-Bot MedGuide** — AI health assistant | Python · Flask · Gemini API | [🔗](https://github.com/Atharva6153-git/B-Bot-Medguide) |
-| 🎓 **UNIFIND** — University discovery (Hackathon) | React · Node · Firebase | [🔗](https://github.com/Shreyas-patil07/UNIFIND) |
-
-<br />
-
-## 🎯 Tech I Ship With
-
-<div align="center">
-
-**Languages**
-`C` `Java` `Python` `JavaScript`
-
-**Frontend**
-`React.js` `Tailwind CSS` `Bootstrap`
-
-**Backend**
-`Node.js` `Express.js` `Flask` `FastAPI`
-
-**Databases**
-`MongoDB` `PostgreSQL` `Firebase`
-
-**Architecture & DevOps**
-`Microservices` `Apache Kafka` `Docker`
-
-**Tools & APIs**
-`Git` `GitHub` `Postman` `Groq AI` `Google Gemini`
-
-</div>
-
-<br />
-
-## 📬 Let's Connect
-
-<div align="center">
-
-[![Email](https://img.shields.io/badge/Email-atharvaj7822@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:atharvaj7822@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Atharva_Jadhav-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/atharva-jadhav-8a0830334/)
-[![GitHub](https://img.shields.io/badge/GitHub-Atharva6153--git-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Atharva6153-git)
-
-</div>
-
-<br />
-
-## 📝 License
-
-This project is open source and available under the **MIT License**. Feel free to fork, remix, and make it your own.
 
 ---
 
-<div align="center">
+## Deployment
 
-**Built with ☕ and a lot of `console.log()` by [Atharva Jadhav](https://github.com/Atharva6153-git)**
+The frontend deploys to Vercel automatically on every push to `main`.
 
-⭐ _If you like this portfolio, drop a star — it makes my day!_ ⭐
+### Manual Vercel setup (first time)
 
-</div>
+1. Go to [vercel.com/new](https://vercel.com/new) and import this repository
+2. Set **Root Directory** to `frontend` — this is required, the build will fail without it
+3. Vercel auto-detects Create React App and sets the build command to `npm run build`
+4. Add environment variables under **Settings → Environment Variables**:
+   - `REACT_APP_EMAILJS_SERVICE_ID`
+   - `REACT_APP_EMAILJS_TEMPLATE_ID`
+   - `REACT_APP_EMAILJS_PUBLIC_KEY`
+5. Click **Deploy**
+
+**No `vercel.json` is needed.** The project relies on Vercel's auto-detection for CRA.
+
+### What's deployed
+
+Only the `frontend/` directory is deployed. The `backend/` directory is not connected to the live site.
+
+---
+
+## Content Updates
+
+All portfolio content — projects, hackathons, skills, personal info, timeline events, and learning tracks — lives in a single file:
+
+```
+frontend/src/mock/mock.js
+```
+
+To update content, edit that file and push. Vercel redeploys automatically.
+
+**Key exports in `mock.js`:**
+
+| Export | Used by |
+|---|---|
+| `personalInfo` | Hero, About, Contact, Footer |
+| `projects` | Projects (cards, modals, case studies, architecture) |
+| `techStack` | TechKeyboard |
+| `hackathons` | Achievements |
+| `timelineEvents` | Experience timeline |
+| `stackNarratives` | Achievements section |
+| `currentlyLearning` | About section |
+| `emailjsConfig` | Contact form |
+
+---
+
+## Screenshots
+
+> Add screenshots here by dropping images into the repository and referencing them below.
+
+```
+📸  Screenshots coming soon.
+    To add: drop images into /screenshots and update the paths below.
+```
+
+<!-- Uncomment and fill in once screenshots are added:
+![Hero Section](./screenshots/hero.png)
+![Projects Section](./screenshots/projects.png)
+![Case Study Modal](./screenshots/case-study.png)
+![Experience Timeline](./screenshots/experience.png)
+-->
+
+---
+
+## Planned Improvements
+
+These are genuine next steps based on the current state of the project — not speculative feature lists.
+
+- Add the updated resume PDF to `frontend/public/` so the resume button triggers a download instead of opening a hosted link
+- Add a `manifest.json` for PWA installability
+- Replace the boilerplate `backend/` with a real API if backend features are added in future (e.g. a view counter, guestbook)
+- Add `og:image` with a generated social preview card (e.g. via Vercel's `@vercel/og`)
+- Migrate from Create React App to Vite for faster dev builds
+
+---
+
+## Author
+
+**Atharva Jadhav**
+Computer Engineering student · B.E. 2024–2028
+Smt. Indira Gandhi College of Engineering, Navi Mumbai
+
+- Portfolio: https://portfolio-apexgg.vercel.app/
+- GitHub: https://github.com/Atharva6153-git
+- LinkedIn: https://www.linkedin.com/in/atharva-jadhav-8a0830334/
+- Email: atharvaj7822@gmail.com
+
+---
+
+## License
+
+This project is open source. You are welcome to fork it and use it as a base for your own portfolio — just swap out the content in `mock.js` with your own information.
