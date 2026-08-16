@@ -7,7 +7,7 @@ export const personalInfo = {
   email: "atharvaj7822@gmail.com",
   linkedin: "https://www.linkedin.com/in/atharva-jadhav-8a0830334/",
   github: "https://github.com/Atharva6153-git",
-  resumeUrl: "https://customer-assets-eiarnc6j.emergentagent.net/job_f3518247-f981-4f25-8ee1-a7fedc37f576/artifacts/pekzka57_Atharva%20Resume.pdf",
+  resumeUrl: "/Atharva_Jadhav_Resume.pdf",
   about: "I'm a passionate Full Stack Developer who loves crafting clean, efficient, and scalable web applications. From building responsive interfaces with React to architecting robust backends with Node.js and Python, I enjoy every layer of the stack. I'm continually exploring modern architectures like microservices, event-driven systems with Kafka, and AI-powered experiences using Groq and Google Gemini APIs.",
   location: "India",
   availability: "Open to opportunities",

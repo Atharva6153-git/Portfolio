@@ -58,9 +58,10 @@ const Hero = () => {
               href={personalInfo.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[hsl(var(--foreground))] text-[hsl(var(--background))] font-medium hover:opacity-90 transition-opacity"
+              download="Atharva_Jadhav_Resume.pdf"
+              className="group inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[hsl(var(--foreground))] text-[hsl(var(--background))] font-medium hover:opacity-90 active:scale-95 transition-all"
             >
-              <FileText className="w-4 h-4" />
+              <FileText className="w-4 h-4 transition-transform group-hover:-translate-y-0.5" />
               <span>Resume</span>
             </a>
             <a

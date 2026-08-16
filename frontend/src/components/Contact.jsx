@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
-import { Send, Mail, Github, Linkedin, Loader2, Check } from "lucide-react";
+import { Send, Mail, Github, Linkedin, Loader2, Check, FileText } from "lucide-react";
 import { personalInfo, emailjsConfig } from "../mock/mock";
 import { useToast } from "../hooks/use-toast";
 
@@ -121,6 +121,22 @@ const Contact = () => {
               <div>
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">LinkedIn</p>
                 <p className="text-sm font-medium">Atharva Jadhav</p>
+              </div>
+            </a>
+
+            <a
+              href={personalInfo.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Atharva_Jadhav_Resume.pdf"
+              className="flex items-center gap-4 p-5 rounded-2xl border border-[hsl(var(--foreground))]/20 bg-[hsl(var(--foreground))]/5 hover:bg-[hsl(var(--foreground))]/10 hover:border-[hsl(var(--foreground))]/35 transition-colors group"
+            >
+              <div className="w-11 h-11 rounded-xl bg-[hsl(var(--foreground))]/10 flex items-center justify-center">
+                <FileText className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+              <div>
+                <p className="text-xs text-[hsl(var(--muted-foreground))]">Resume</p>
+                <p className="text-sm font-medium">Download PDF</p>
               </div>
             </a>
           </motion.div>
