@@ -83,6 +83,8 @@ export const projects = [
   {
     id: 1,
     title: "ZenoGuard",
+    isFeatured: true,
+    featuredOrder: 1,
     description: "AI-powered blockchain micro-insurance platform for gig workers. Built with personalized risk-based pricing, automated KYC verification, claim verification, and blockchain-enforced payouts. Backend: FastAPI + PostgreSQL + ML services + Web3.py",
     tech: ["React", "FastAPI", "PostgreSQL", "Solidity", "Web3.py", "Razorpay", "YOLO", "Cloudinary"],
     github: "https://github.com/Shreyas-patil07/ZenoGuard_final",
@@ -262,6 +264,8 @@ export const projects = [
   {
     id: 3,
     title: "B-Bot MedGuide",
+    isFeatured: true,
+    featuredOrder: 2,
     description: "An AI-powered medical assistance chatbot that helps users get preliminary health guidance. Integrates advanced language models for accurate, empathetic responses.",
     tech: ["Python", "Flask", "Gemini API", "React"],
     github: "https://github.com/Atharva6153-git/B-Bot-Medguide",
@@ -426,6 +430,8 @@ export const projects = [
   {
     id: 4,
     title: "UNIFIND",
+    isFeatured: true,
+    featuredOrder: 3,
     description: "A hackathon-winning platform that helps students discover universities, courses, and scholarships tailored to their profile. Collaborative project built under tight deadlines.",
     tech: ["React", "Node.js", "MongoDB", "Firebase"],
     github: "https://github.com/Shreyas-patil07/UNIFIND",
